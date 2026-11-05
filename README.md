@@ -36,6 +36,14 @@ npm test        # vitest (lógica de horarios y grupos)
 npm run build   # typecheck + build de producción
 ```
 
+## Publicar como sitio web (GitHub Pages)
+
+La app ya es un sitio formal: landing en `#/` y la app en `#/app`.
+
+1. `npm run build` genera `dist/` (con `base: './'`, funciona en cualquier subruta)
+2. En GitHub: **Settings → Pages → Source: Deploy from a branch** y elige la carpeta `/docs`, o usa un workflow de GitHub Actions que publique `dist/`
+3. El `public/404.html` hace de fallback para que `#/app` funcione al recargar
+
 ## Próximos pasos (fuera del prototipo local)
 
 - Backend con cuentas de usuaria para grupos en tiempo real entre dispositivos

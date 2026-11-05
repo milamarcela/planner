@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ThemeContext, initialTheme } from "./theme";
 import type { Theme } from "./theme";
 import Icon from "./components/Icon";
+import Landing from "./landing/Landing";
 import TodayView from "./views/TodayView";
 import ScheduleView from "./views/ScheduleView";
 import GroupsView from "./views/GroupsView";
@@ -18,7 +19,28 @@ const TABS: Array<{ id: Tab; icon: "sparkle" | "calendar" | "users" | "music"; l
   { id: "study", icon: "music", label: "Estudiar" },
 ];
 
+function useHashRoute(): "landing" | "app" {
+  const [route, setRoute] = useState<"landing" | "app">(
+    window.location.hash.startsWith("#/app") ? "app" : "landing",
+  );
+  useEffect(() => {
+    const onChange = () =>
+      setRoute(window.location.hash.startsWith("#/app") ? "app" : "landing");
+    window.addEventListener("hashchange", onChange);
+    return () => window.removeEventListener("hashchange", onChange);
+  }, []);
+  return route;
+}
+
 export default function App() {
+  const route = useHashRoute();
+  if (route === "landing") {
+    return <Landing onEnter={() => (window.location.hash = "#/app")} />;
+  }
+  return <Planner />;
+}
+
+function Planner() {
   const [theme, setTheme] = useState<Theme>(initialTheme);
   const [tab, setTab] = useState<Tab>("today");
 
@@ -41,12 +63,14 @@ export default function App() {
             <Icon name="flower" size={30} color="var(--primary)" />
             StudyBloom
           </div>
-          {getProfile().avatar && (
-            <img src={getProfile().avatar} alt="Perfil" className="header-avatar" />
-          )}
-          <button className="theme-toggle" onClick={toggle} aria-label="Cambiar tema">
-            <Icon name={theme === "light" ? "moon" : "sun"} size={20} />
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {getProfile().avatar && (
+              <img src={getProfile().avatar} alt="Perfil" className="header-avatar" />
+            )}
+            <button className="theme-toggle" onClick={toggle} aria-label="Cambiar tema">
+              <Icon name={theme === "light" ? "moon" : "sun"} size={20} />
+            </button>
+          </div>
         </header>
         {tab === "today" && <TodayView />}
         {tab === "schedule" && <ScheduleView />}
