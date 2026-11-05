@@ -11,19 +11,28 @@ export default function ProfileView() {
   const [profile, setProfile] = useState(getProfile());
   const [error, setError] = useState("");
   const [spotifyLinked, setSpotifyLinked] = useState(!!getToken());
-  const fileRef = useRef<HTMLInputElement>(null);
+  const avatarRef = useRef<HTMLInputElement>(null);
+  const coverRef = useRef<HTMLInputElement>(null);
   const { theme, toggleTheme } = useTheme();
 
   const classes = getClasses().length;
   const groups = getGroups().filter((g) => g.members.includes(getMyName())).length;
   const minutes = totalFocusMinutes();
 
-  const onPick = async (file: File | undefined) => {
+  const update = (patch: Partial<typeof profile>) => {
+    const next = { ...profile, ...patch };
+    saveProfile(next);
+    setProfile(next);
+    if (patch.name !== undefined) setMyName(patch.name);
+  };
+
+  const onPick = async (file: File | undefined, kind: "avatar" | "cover") => {
     if (!file) return;
     setError("");
     try {
       const dataUrl = await readImageFile(file);
-      setAvatar(dataUrl);
+      if (kind === "avatar") setAvatar(dataUrl);
+      else saveProfile({ ...getProfile(), cover: dataUrl });
       setProfile(getProfile());
     } catch (e) {
       setError((e as Error).message);
@@ -32,50 +41,73 @@ export default function ProfileView() {
 
   return (
     <>
-      <div className="card profile-card">
-        <div className="profile-row">
+      <div className="card profile-hero">
+        <div
+          className="profile-cover"
+          style={
+            profile.cover
+              ? { backgroundImage: `url(${profile.cover})` }
+              : undefined
+          }
+        >
+          <button className="cover-edit" onClick={() => coverRef.current?.click()}>
+            <Icon name="pencil" size={13} />
+            Cambiar portada
+          </button>
+        </div>
+        <div className="profile-id">
           <button
-            className="avatar-btn"
-            onClick={() => fileRef.current?.click()}
-            aria-label="Subir foto de perfil"
+            className="avatar-btn avatar-lg"
+            onClick={() => avatarRef.current?.click()}
+            aria-label="Cambiar foto de perfil"
           >
             {profile.avatar ? (
-              <img src={profile.avatar} alt="Tu foto" className="avatar" />
+              <img src={profile.avatar} alt="Tu foto" className="avatar avatar-xl" />
             ) : (
-              <span className="avatar avatar-placeholder">
-                <Icon name="flower" size={26} color="var(--primary)" />
+              <span className="avatar avatar-xl avatar-placeholder">
+                <Icon name="flower" size={34} color="var(--primary)" />
               </span>
             )}
             <span className="avatar-edit">
-              <Icon name="pencil" size={13} />
+              <Icon name="pencil" size={14} />
             </span>
           </button>
-          <div style={{ flex: 1 }}>
-            <h2 style={{ marginBottom: 4 }}>
-              <Icon name="sparkle" size={20} color="var(--primary)" />
-              Mi perfil
-            </h2>
+          <div className="profile-names">
             <input
+              className="profile-name"
               value={profile.name}
-              placeholder="Tu nombre"
-              style={{ marginBottom: 4 }}
-              onChange={(e) => {
-                const name = e.target.value;
-                saveProfile({ ...profile, name });
-                setProfile({ ...profile, name });
-                setMyName(name);
-              }}
+              placeholder="tu nombre"
+              onChange={(e) => update({ name: e.target.value })}
             />
-            <span className="muted">Toca la foto para subir una imagen desde tu dispositivo.</span>
+            <input
+              className="profile-quote"
+              value={profile.quote}
+              placeholder="tu frase favorita…"
+              onChange={(e) => update({ quote: e.target.value })}
+            />
           </div>
         </div>
+        <textarea
+          className="profile-bio"
+          value={profile.bio}
+          rows={2}
+          placeholder="Cuéntanos algo sobre ti…"
+          onChange={(e) => update({ bio: e.target.value })}
+        />
         {error && <div className="error">{error}</div>}
         <input
-          ref={fileRef}
+          ref={avatarRef}
           type="file"
           accept="image/*"
           hidden
-          onChange={(e) => void onPick(e.target.files?.[0])}
+          onChange={(e) => void onPick(e.target.files?.[0], "avatar")}
+        />
+        <input
+          ref={coverRef}
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={(e) => void onPick(e.target.files?.[0], "cover")}
         />
       </div>
 

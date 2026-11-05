@@ -5,10 +5,15 @@ const KEY = "profile";
 export interface Profile {
   name: string;
   avatar: string;
+  cover: string;
+  bio: string;
+  quote: string;
 }
 
+const EMPTY: Profile = { name: "", avatar: "", cover: "", bio: "", quote: "" };
+
 export function getProfile(): Profile {
-  return loadJSON<Profile>(KEY, { name: "", avatar: "" });
+  return { ...EMPTY, ...loadJSON<Partial<Profile>>(KEY, {}) };
 }
 
 export function saveProfile(profile: Profile): void {
