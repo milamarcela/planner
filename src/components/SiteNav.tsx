@@ -3,8 +3,7 @@ import type { IconName } from "./Icon";
 import { useTheme } from "../theme";
 import { getToken } from "../lib/spotify";
 import { getProfile } from "../lib/profile";
-
-type Tab = "today" | "schedule" | "subjects" | "groups" | "study" | "spotify";
+import type { Tab } from "../App";
 
 const APP_TABS: Array<{ id: Tab; icon: IconName; label: string }> = [
   { id: "today", icon: "sparkle", label: "Hoy" },
@@ -13,6 +12,7 @@ const APP_TABS: Array<{ id: Tab; icon: IconName; label: string }> = [
   { id: "groups", icon: "users", label: "Grupos" },
   { id: "study", icon: "clock", label: "Estudiar" },
   { id: "spotify", icon: "music", label: "Spotify" },
+  { id: "profile", icon: "heart", label: "Perfil" },
 ];
 
 export default function SiteNav({
@@ -29,7 +29,7 @@ export default function SiteNav({
   const avatar = getProfile().avatar;
 
   return (
-    <nav className="topnav">
+    <nav className={`topnav${mode === "app" ? " sidenav" : ""}`}>
       <a className="logo topnav-logo" href="#/">
         <Icon name="flower" size={24} color="var(--primary)" />
         StudyBloom
@@ -51,7 +51,7 @@ export default function SiteNav({
               className={activeTab === t.id ? "active" : ""}
               onClick={() => onTab?.(t.id)}
             >
-              <Icon name={t.icon} size={16} />
+              <Icon name={t.icon} size={17} />
               <span className="topnav-label">{t.label}</span>
             </button>
           ))
@@ -61,10 +61,12 @@ export default function SiteNav({
         {mode === "app" && spotifyLinked && (
           <span className="spotify-chip" title="Spotify vinculado">
             <Icon name="music" size={13} />
-            Spotify
+            <span className="topnav-label">Spotify</span>
           </span>
         )}
-        {avatar && <img src={avatar} alt="Perfil" className="header-avatar" />}
+        {mode === "app" && avatar && (
+          <img src={avatar} alt="Perfil" className="header-avatar" />
+        )}
         <button className="theme-toggle" onClick={toggleTheme} aria-label="Cambiar tema">
           <Icon name={theme === "light" ? "moon" : "sun"} size={18} />
         </button>

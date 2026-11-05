@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { ThemeContext, initialTheme } from "./theme";
 import type { Theme } from "./theme";
 import SiteNav from "./components/SiteNav";
+import MiniPlayer from "./components/MiniPlayer";
+import { PlayerProvider } from "./lib/player";
 import Landing from "./landing/Landing";
 import TodayView from "./views/TodayView";
 import ScheduleView from "./views/ScheduleView";
@@ -9,9 +11,10 @@ import SubjectsView from "./views/SubjectsView";
 import GroupsView from "./views/GroupsView";
 import StudyView from "./views/StudyView";
 import SpotifyView from "./views/SpotifyView";
+import ProfileView from "./views/ProfileView";
 import { handleRedirectCallback } from "./lib/spotify";
 
-type Tab = "today" | "schedule" | "subjects" | "groups" | "study" | "spotify";
+export type Tab = "today" | "schedule" | "subjects" | "groups" | "study" | "spotify" | "profile";
 
 function useHashRoute(): "landing" | "app" {
   const [route, setRoute] = useState<"landing" | "app">(
@@ -53,7 +56,9 @@ export default function App() {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {route === "landing" ? <Landing /> : <Planner />}
+      <PlayerProvider>
+        {route === "landing" ? <Landing /> : <Planner />}
+      </PlayerProvider>
     </ThemeContext.Provider>
   );
 }
@@ -64,14 +69,16 @@ function Planner() {
   return (
     <div className="app">
       <SiteNav mode="app" activeTab={tab} onTab={setTab} />
-      <main>
+      <main key={tab} className="page">
         {tab === "today" && <TodayView />}
         {tab === "schedule" && <ScheduleView />}
         {tab === "subjects" && <SubjectsView />}
         {tab === "groups" && <GroupsView />}
         {tab === "study" && <StudyView />}
         {tab === "spotify" && <SpotifyView />}
+        {tab === "profile" && <ProfileView />}
       </main>
+      <MiniPlayer />
     </div>
   );
 }

@@ -1391,3 +1391,160 @@ label {
     height: 150px;
   }
 }
+
+/* Animaciones de página */
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+main.page {
+  animation: pageIn 0.25s ease both;
+}
+
+.card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+}
+
+/* Sidebar izquierdo en la app (pantallas grandes) */
+@media (min-width: 900px) {
+  .app {
+    max-width: none;
+    margin-left: 224px;
+    padding: 24px 32px 120px;
+  }
+
+  .topnav.sidenav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 224px;
+    margin: 0;
+    padding: 20px 14px;
+    flex-direction: column;
+    align-items: stretch;
+    border-bottom: none;
+    border-right: 2px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .topnav.sidenav .topnav-logo {
+    font-size: 1.4rem;
+    padding: 0 8px 16px;
+  }
+
+  .topnav.sidenav .topnav-links {
+    flex-direction: column;
+    gap: 4px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .topnav.sidenav .topnav-links button {
+    justify-content: flex-start;
+    padding: 11px 14px;
+    font-size: 0.95rem;
+    border-radius: 14px;
+  }
+
+  .topnav.sidenav .topnav-right {
+    margin-top: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 4px 0;
+    border-top: 2px dashed var(--border);
+  }
+
+  .topnav.sidenav .spotify-chip {
+    justify-content: center;
+  }
+
+  .topnav.sidenav .header-avatar {
+    align-self: center;
+    width: 48px;
+    height: 48px;
+  }
+
+  .topnav.sidenav .theme-toggle {
+    align-self: center;
+  }
+}
+
+/* Mini reproductor persistente */
+@keyframes slideUp {
+  from {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mini-player {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-strong);
+  padding: 8px 10px;
+  max-width: calc(100vw - 24px);
+  animation: slideUp 0.3s ease both;
+}
+
+@media (min-width: 900px) {
+  .mini-player {
+    left: calc(224px + (100vw - 224px) / 2);
+  }
+}
+
+.mp-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: linear-gradient(150deg, var(--primary), var(--accent));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mp-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-frame {
+  width: 260px;
+  max-width: 40vw;
+  height: 80px;
+  border: none;
+  border-radius: 12px;
+}

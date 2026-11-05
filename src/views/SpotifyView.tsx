@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Icon from "../components/Icon";
 import NowPlaying from "../components/NowPlaying";
+import { usePlayer } from "../lib/player";
 import {
   connectSpotify,
   disconnectSpotify,
-  embedPlaylistUrl,
-  embedTrackUrl,
   FOCUS_PLAYLISTS,
   getToken,
   isSpotifyConfigured,
@@ -25,8 +24,7 @@ export default function SpotifyView() {
   const [connected, setConnected] = useState(!!getToken());
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SpotifyTrack[]>([]);
-  const [playing, setPlaying] = useState<string | null>(null);
-  const [openPlaylist, setOpenPlaylist] = useState<string | null>(null);
+  const { player, playTrack, playPlaylist, stop } = usePlayer();
   const [error, setError] = useState("");
 
   const search = async (q: string) => {
@@ -118,16 +116,17 @@ export default function SpotifyView() {
                 <div className="artist">{t.artist}</div>
               </div>
               <button
-                className={playing === t.id ? "secondary" : "btn-solid"}
-                onClick={() => setPlaying(playing === t.id ? null : t.id)}
+                className={player.kind === "track" && player.id === t.id ? "secondary" : "btn-solid"}
+                onClick={() =>
+                  player.kind === "track" && player.id === t.id
+                    ? stop()
+                    : playTrack(t.id, `${t.name} — ${t.artist}`)
+                }
                 aria-label="Reproducir"
               >
-                <Icon name={playing === t.id ? "pause" : "play"} size={16} />
+                <Icon name={player.kind === "track" && player.id === t.id ? "pause" : "play"} size={16} />
               </button>
             </div>
-            {playing === t.id && (
-              <iframe className="spotify-frame" src={embedTrackUrl(t.id)} title={t.name} loading="lazy" />
-            )}
           </div>
         ))}
 
@@ -139,25 +138,19 @@ export default function SpotifyView() {
           {FOCUS_PLAYLISTS.map((p, i) => (
             <button
               key={p.id}
-              className={`playlist-card${openPlaylist === p.id ? " open" : ""}`}
-              onClick={() => setOpenPlaylist(openPlaylist === p.id ? null : p.id)}
+              className={`playlist-card${player.kind === "playlist" && player.id === p.id ? " open" : ""}`}
+              onClick={() =>
+                player.kind === "playlist" && player.id === p.id ? stop() : playPlaylist(p.id, p.title)
+              }
             >
               <span className="playlist-cover" style={{ background: PLAYLIST_TINTS[i % PLAYLIST_TINTS.length] }}>
                 <Icon name="music" size={26} color="#4a3542" />
               </span>
               <span className="playlist-title">{p.title}</span>
-              <Icon name={openPlaylist === p.id ? "pause" : "play"} size={15} />
+              <Icon name={player.kind === "playlist" && player.id === p.id ? "pause" : "play"} size={15} />
             </button>
           ))}
         </div>
-        {openPlaylist && (
-          <iframe
-            className="spotify-frame"
-            src={embedPlaylistUrl(openPlaylist)}
-            title="Playlist"
-            loading="lazy"
-          />
-        )}
       </div>
     </>
   );
