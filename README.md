@@ -24,7 +24,7 @@ Abrir http://localhost:5173 (en el celular de la misma red: `npm run dev -- --ho
 
 1. Crea una app en [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
 2. Copia `.env.example` a `.env` y pega tu `Client ID`.
-3. Registra la URL de redirección (ej. `http://localhost:5173/`).
+3. Registra la URL de redirección `http://127.0.0.1:5173/` (Spotify solo permite HTTP en loopback con IP explícita, no `localhost`).
 4. En la pestaña **🎧 Estudiar** pulsa "Conectar Spotify".
 
 Sin configurar el Client ID, la app sigue mostrando playlists embebidas de study vibes.

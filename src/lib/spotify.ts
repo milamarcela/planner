@@ -18,7 +18,9 @@ export function isSpotifyConfigured(): boolean {
 }
 
 function redirectUri(): string {
-  return window.location.origin + "/";
+  const url = new URL(window.location.origin);
+  if (url.hostname === "localhost") url.hostname = "127.0.0.1";
+  return url.origin + "/";
 }
 
 async function sha256(text: string): Promise<ArrayBuffer> {
