@@ -15,6 +15,8 @@ import {
 } from "../lib/spotify";
 import type { SpotifyTrack } from "../lib/spotify";
 
+const QUICK_SEARCHES = ["lofi study", "Taylor Swift", "reggaeton", "jazz café", "piano relax"];
+
 export default function StudyView() {
   const [minutes, setMinutes] = useState(25);
   const [secondsLeft, setSecondsLeft] = useState(25 * 60);
@@ -98,7 +100,7 @@ export default function StudyView() {
         )}
         <div className="row">
           {!running ? (
-            <button onClick={start}>
+            <button className="btn-solid" onClick={start}>
               <Icon name="play" size={16} />
               Empezar a estudiar
             </button>
@@ -127,34 +129,41 @@ function MusicPanel() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SpotifyTrack[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
+  const [openPlaylist, setOpenPlaylist] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  const search = async () => {
+  const search = async (q: string) => {
     setError("");
-    if (!query.trim()) return;
-    const tracks = await searchTracks(query.trim());
+    if (!q.trim()) return;
+    setQuery(q);
+    const tracks = await searchTracks(q.trim());
     setResults(tracks);
     if (tracks.length === 0 && connected) setError("Sin resultados (o la sesión expiró).");
   };
 
   return (
-    <div className="card">
+    <div className="card music-panel">
       <h2>
         <Icon name="music" size={22} color="var(--primary)" />
         Música con Spotify
       </h2>
+
+      {connected && <NowPlaying />}
+
       {!isSpotifyConfigured() && (
-        <p className="muted">
-          Para buscar música necesitas crear una app en{" "}
-          <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noreferrer">
-            developer.spotify.com
-          </a>{" "}
-          y poner su <em>Client ID</em> en <code>VITE_SPOTIFY_CLIENT_ID</code> (archivo <code>.env</code>), con la
-          URL de redirección <code>{typeof window !== "undefined" ? window.location.origin : ""}</code> registrada.
-          Mientras tanto, disfruta estas playlists para estudiar:
-        </p>
+        <div className="spotify-hint">
+          <p className="muted">
+            Para buscar tu música y ver el widget "Sonando ahora" en vivo, crea una app en{" "}
+            <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noreferrer">
+              developer.spotify.com
+            </a>{" "}
+            y pega su <em>Client ID</em> en <code>VITE_SPOTIFY_CLIENT_ID</code> (archivo <code>.env</code>).
+            Mientras tanto, usa las playlists de abajo — funcionan sin configuración.
+          </p>
+        </div>
       )}
-      <div className="row">
+
+      <div className="row" style={{ marginTop: 12 }}>
         {connected ? (
           <button
             className="secondary"
@@ -169,6 +178,7 @@ function MusicPanel() {
           </button>
         ) : (
           <button
+            className="btn-solid"
             onClick={async () => {
               try {
                 await connectSpotify();
@@ -183,21 +193,31 @@ function MusicPanel() {
         )}
       </div>
       {error && <div className="error">{error}</div>}
-      {connected && <NowPlaying />}
+
       {connected && (
-        <div className="row" style={{ marginTop: 10 }}>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && void search()}
-            placeholder="Busca una canción o artista…"
-            style={{ marginBottom: 0 }}
-          />
-          <button className="icon-btn" onClick={() => void search()} aria-label="Buscar">
-            <Icon name="search" size={18} />
-          </button>
-        </div>
+        <>
+          <div className="row" style={{ marginTop: 12 }}>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && void search(query)}
+              placeholder="Busca una canción o artista…"
+              style={{ marginBottom: 0 }}
+            />
+            <button className="icon-btn btn-solid" onClick={() => void search(query)} aria-label="Buscar">
+              <Icon name="search" size={18} />
+            </button>
+          </div>
+          <div className="chip-list" style={{ marginTop: 8 }}>
+            {QUICK_SEARCHES.map((q) => (
+              <button key={q} className="quick-chip" onClick={() => void search(q)}>
+                {q}
+              </button>
+            ))}
+          </div>
+        </>
       )}
+
       {results.map((t) => (
         <div key={t.id}>
           <div className="track-item">
@@ -206,7 +226,11 @@ function MusicPanel() {
               <div className="name">{t.name}</div>
               <div className="artist">{t.artist}</div>
             </div>
-            <button onClick={() => setPlaying(playing === t.id ? null : t.id)} aria-label="Reproducir">
+            <button
+              className={playing === t.id ? "secondary" : "btn-solid"}
+              onClick={() => setPlaying(playing === t.id ? null : t.id)}
+              aria-label="Reproducir"
+            >
               <Icon name={playing === t.id ? "pause" : "play"} size={16} />
             </button>
           </div>
@@ -215,16 +239,40 @@ function MusicPanel() {
           )}
         </div>
       ))}
-      <h3 style={{ marginTop: 14 }}>
+
+      <h3 style={{ marginTop: 16 }}>
         <Icon name="flower" size={18} color="var(--accent)" />
         Playlists para estudiar
       </h3>
-      {FOCUS_PLAYLISTS.map((p) => (
-        <details key={p.id} style={{ marginBottom: 8 }}>
-          <summary style={{ cursor: "pointer", fontWeight: 700 }}>{p.title}</summary>
-          <iframe className="spotify-frame" src={embedPlaylistUrl(p.id)} title={p.title} loading="lazy" />
-        </details>
-      ))}
+      <div className="playlist-grid">
+        {FOCUS_PLAYLISTS.map((p, i) => (
+          <button
+            key={p.id}
+            className={`playlist-card${openPlaylist === p.id ? " open" : ""}`}
+            onClick={() => setOpenPlaylist(openPlaylist === p.id ? null : p.id)}
+          >
+            <span className="playlist-cover" style={{ background: PLAYLIST_TINTS[i % PLAYLIST_TINTS.length] }}>
+              <Icon name="music" size={26} color="#4a3542" />
+            </span>
+            <span className="playlist-title">{p.title}</span>
+            <Icon name={openPlaylist === p.id ? "pause" : "play"} size={15} />
+          </button>
+        ))}
+      </div>
+      {openPlaylist && (
+        <iframe
+          className="spotify-frame"
+          src={embedPlaylistUrl(openPlaylist)}
+          title="Playlist"
+          loading="lazy"
+        />
+      )}
     </div>
   );
 }
+
+const PLAYLIST_TINTS = [
+  "linear-gradient(150deg,#f6a8c0,#ef8fb4)",
+  "linear-gradient(150deg,#cdb4f6,#a58ae0)",
+  "linear-gradient(150deg,#a8d8f0,#7fbfe0)",
+];
