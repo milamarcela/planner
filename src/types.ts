@@ -1,7 +1,7 @@
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"] as const;
-export const WEEK_DAYS: DayOfWeek[] = [1, 2, 3, 4, 5, 6];
+export const WEEK_DAYS: DayOfWeek[] = [1, 2, 3, 4, 5, 6, 0];
 
 export interface ClassBlock {
   id: string;
@@ -35,11 +35,15 @@ export interface StudySession {
 
 export const CLASS_COLORS = [
   "#f6a8c0",
-  "#cdb4f6",
-  "#a8d8f0",
-  "#b8e6c8",
-  "#ffe3a3",
-  "#f9c6a0",
   "#f5a8d0",
+  "#f9b8d0",
+  "#cdb4f6",
+  "#c9c2f5",
+  "#a8d8f0",
   "#a3e8e0",
+  "#b8e6c8",
+  "#d0f0e8",
+  "#ffe3a3",
+  "#ffd6a5",
+  "#f9c6a0",
 ];

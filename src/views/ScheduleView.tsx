@@ -23,7 +23,7 @@ export default function ScheduleView() {
           <Icon name="calendar" size={22} color="var(--primary)" />
           Mi horario universitario
         </h2>
-        <div className="grid-week">
+        <div className="week-strip">
           {WEEK_DAYS.map((d) => (
             <div className="day-col" key={d}>
               <h4>{DAY_NAMES[d]}</h4>

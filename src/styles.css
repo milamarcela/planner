@@ -1754,3 +1754,79 @@ main.page {
   border-radius: 14px;
   resize: vertical;
 }
+
+/* Horario: semana en línea con scroll horizontal */
+.week-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.week-strip .day-col {
+  flex: 1 0 128px;
+  min-width: 128px;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 10px 8px;
+  box-shadow: var(--shadow);
+}
+
+/* Mini reproductor: que no desborde en pantallas chicas */
+.mini-player {
+  flex-wrap: nowrap;
+  max-width: calc(100vw - 16px);
+}
+
+@media (max-width: 620px) {
+  .mini-player {
+    bottom: 10px;
+    padding: 6px 8px;
+    gap: 8px;
+  }
+  .mp-title {
+    display: none;
+  }
+  .mp-frame {
+    width: min(52vw, 240px);
+    height: 72px;
+  }
+  .mp-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Botón cambiar portada siempre visible (también en modo oscuro) */
+.cover-edit {
+  background: #ffffff;
+  color: #d6739f;
+  border: 2px solid #f0aec8;
+}
+
+/* Perfil responsive */
+@media (max-width: 620px) {
+  .profile-cover {
+    height: 96px;
+  }
+  .profile-id {
+    flex-wrap: wrap;
+    margin-top: -34px;
+    gap: 10px;
+  }
+  .avatar-xl {
+    width: 68px;
+    height: 68px;
+  }
+  .profile-name {
+    font-size: 1.25rem;
+  }
+  .profile-bio {
+    margin: 10px 14px 14px;
+    width: calc(100% - 28px);
+  }
+  .app {
+    padding-bottom: 130px;
+  }
+}
