@@ -18,7 +18,7 @@ npm install
 npm run dev
 ```
 
-Abrir http://localhost:5173 (en el celular de la misma red: `npm run dev -- --host`).
+Abrir http://127.0.0.1:5173 (en desarrollo la app redirige sola a 127.0.0.1 porque Spotify solo acepta esa URI en local; en el celular de la misma red: `npm run dev -- --host` y usa la IP de tu PC).
 
 ## Conectar Spotify
 

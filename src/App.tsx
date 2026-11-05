@@ -35,6 +35,12 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    if (import.meta.env.DEV && window.location.hostname === "localhost") {
+      const url = new URL(window.location.href);
+      url.hostname = "127.0.0.1";
+      window.location.replace(url.toString());
+      return;
+    }
     void handleRedirectCallback().then((handled) => {
       if (handled && !window.location.hash.startsWith("#/app")) {
         window.location.hash = "#/app";
