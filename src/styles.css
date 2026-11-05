@@ -1830,3 +1830,48 @@ main.page {
     padding-bottom: 130px;
   }
 }
+
+/* Semana: columnas flexibles en desktop, scroll solo en pantallas chicas */
+.week-strip .day-col {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.week-strip .day-col h4 {
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 760px) {
+  .week-strip .day-col {
+    flex: 1 0 112px;
+    min-width: 112px;
+  }
+}
+
+/* Títulos de tarjetas: que hagan wrap en vez de desbordar */
+.card h2,
+.card h3 {
+  flex-wrap: wrap;
+  line-height: 1.3;
+}
+
+/* Portada subida en modo oscuro: overlay para legibilidad */
+:root[data-theme="dark"] .profile-cover[style] {
+  box-shadow: inset 0 0 0 1000px rgba(30, 20, 30, 0.38);
+}
+
+/* Reproductor: el frame nunca supera la pantalla */
+.mp-frame {
+  max-width: 56vw;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+@media (max-width: 620px) {
+  .mp-frame {
+    max-width: 46vw;
+  }
+}

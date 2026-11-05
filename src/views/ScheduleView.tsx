@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CLASS_COLORS, DAY_NAMES, WEEK_DAYS } from "../types";
+import { CLASS_COLORS, DAY_NAMES, DAY_NAMES_FULL, WEEK_DAYS } from "../types";
 import type { ClassBlock, DayOfWeek } from "../types";
 import Icon from "../components/Icon";
 import {
@@ -26,7 +26,7 @@ export default function ScheduleView() {
         <div className="week-strip">
           {WEEK_DAYS.map((d) => (
             <div className="day-col" key={d}>
-              <h4>{DAY_NAMES[d]}</h4>
+              <h4>{DAY_NAMES_FULL[d]}</h4>
               {classesForDay(d as DayOfWeek).map((c) => (
                 <div
                   key={c.id}

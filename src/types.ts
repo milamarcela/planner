@@ -1,6 +1,7 @@
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"] as const;
+export const DAY_NAMES_FULL = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"] as const;
 export const WEEK_DAYS: DayOfWeek[] = [1, 2, 3, 4, 5, 6, 0];
 
 export interface ClassBlock {
