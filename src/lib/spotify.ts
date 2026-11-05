@@ -20,7 +20,7 @@ export function isSpotifyConfigured(): boolean {
 function redirectUri(): string {
   const url = new URL(window.location.origin);
   if (url.hostname === "localhost") url.hostname = "127.0.0.1";
-  return url.origin + "/";
+  return url.origin;
 }
 
 async function sha256(text: string): Promise<ArrayBuffer> {
@@ -60,6 +60,12 @@ export async function connectSpotify(): Promise<void> {
 
 export async function handleRedirectCallback(): Promise<boolean> {
   const params = new URLSearchParams(window.location.search);
+  const oauthError = params.get("error");
+  if (oauthError) {
+    alert(`Spotify devolvió un error: ${oauthError}`);
+    window.history.replaceState({}, "", redirectUri());
+    return false;
+  }
   const code = params.get("code");
   if (!code) return false;
   const verifier = sessionStorage.getItem("studybloom:pkceVerifier");
