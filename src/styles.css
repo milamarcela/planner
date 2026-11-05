@@ -1125,28 +1125,27 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 4px;
-  margin-bottom: 20px;
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(12px);
-  border-bottom: 2px solid var(--border);
+  gap: 10px;
+  padding: 8px 2px;
+  margin-bottom: 16px;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
 }
 
 .topnav-logo {
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   text-decoration: none;
   color: var(--primary-strong);
 }
 
 .topnav-links {
   display: flex;
-  gap: 4px;
-  background: var(--surface);
-  border: 2px solid var(--border);
+  gap: 2px;
+  background: transparent;
+  border: none;
   border-radius: 999px;
-  padding: 5px;
-  box-shadow: var(--shadow);
+  padding: 2px;
   overflow-x: auto;
   max-width: 100%;
 }
@@ -1156,8 +1155,8 @@ label {
   background: transparent;
   color: var(--text-soft);
   box-shadow: none;
-  padding: 7px 13px;
-  font-size: 0.88rem;
+  padding: 6px 11px;
+  font-size: 0.85rem;
   font-weight: 700;
   border-radius: 999px;
   text-decoration: none;
@@ -1174,6 +1173,7 @@ label {
 .topnav-link:hover {
   background: var(--primary-soft);
   color: var(--primary-strong);
+  box-shadow: none;
 }
 
 .topnav-right {
