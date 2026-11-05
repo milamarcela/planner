@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "../components/Icon";
 import NowPlaying from "../components/NowPlaying";
-import { usePlayer } from "../lib/player";
+import { usePlayer } from "../lib/playerContext";
 import {
   connectSpotify,
   disconnectSpotify,
@@ -60,7 +60,7 @@ export default function SpotifyView() {
                 Desconectar Spotify
               </button>
             </div>
-            <div className="row" style={{ marginTop: 12 }}>
+            <div className="row music-search">
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}

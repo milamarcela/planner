@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { StudyGroup } from "../types";
 import Icon from "../components/Icon";
+import Modal from "../components/Modal";
 import {
   createGroup,
   deleteGroup,
@@ -134,36 +135,29 @@ function CreateGroupModal({
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h3>
-          <Icon name="flower" size={20} color="var(--primary)" />
-          Nuevo grupo de estudio
-        </h3>
-        {error && <div className="error">{error}</div>}
-        <label>Nombre del grupo</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej. Las Cerezas" />
-        <label>Materia</label>
-        <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Ej. Química Orgánica" />
-        <label>Descripción</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Ej. Repasamos el capítulo 4 los martes"
-          rows={2}
-        />
-        <div className="row">
-          <button onClick={submit}>
-            <Icon name="heart" size={16} />
-            Crear
-          </button>
-          <button className="ghost" onClick={onClose}>
-            <Icon name="x" size={16} />
-            Cancelar
-          </button>
-        </div>
+    <Modal title="Nuevo grupo de estudio" icon="flower" onClose={onClose}>
+      {error && <div className="error">{error}</div>}
+      <label>Nombre del grupo</label>
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej. Las Cerezas" />
+      <label>Materia</label>
+      <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Ej. Química Orgánica" />
+      <label>Descripción</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Ej. Repasamos el capítulo 4 los martes"
+        rows={2}
+      />
+      <div className="row modal-actions">
+        <button type="button" onClick={submit}>
+          <Icon name="heart" size={16} />
+          Crear
+        </button>
+        <button type="button" className="ghost" onClick={onClose}>
+          Cancelar
+        </button>
       </div>
-    </div>
+    </Modal>
   );
 }
 

@@ -36,6 +36,9 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("studybloom:theme", theme);
+    // Barra de estado de Android acorde al tema activo
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "light" ? "#f7c8d8" : "#241b26");
   }, [theme]);
 
   useEffect(() => {

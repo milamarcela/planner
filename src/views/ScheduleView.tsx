@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CLASS_COLORS, DAY_NAMES, DAY_NAMES_FULL, WEEK_DAYS } from "../types";
 import type { ClassBlock, DayOfWeek } from "../types";
 import Icon from "../components/Icon";
+import Modal from "../components/Modal";
 import {
   addClass,
   classesForDay,
@@ -45,7 +46,7 @@ export default function ScheduleView() {
             </div>
           ))}
         </div>
-        <button style={{ marginTop: 8 }} onClick={() => setEditing({} as ClassBlock)}>
+        <button type="button" style={{ marginTop: 8 }} onClick={() => setEditing({} as ClassBlock)}>
           <Icon name="plus" size={17} />
           Agregar clase
         </button>
@@ -91,92 +92,95 @@ function ClassModal({
     if (conflict) {
       return setError(`Se cruza con ${conflict.subject} (${conflict.start}–${conflict.end}).`);
     }
-    const data = { subject: subject.trim(), day, start, end, room: room.trim(), teacher: teacher.trim(), color, notes: notes.trim() };
+    const data = {
+      subject: subject.trim(),
+      day,
+      start,
+      end,
+      room: room.trim(),
+      teacher: teacher.trim(),
+      color,
+      notes: notes.trim(),
+    };
     if (isNew) addClass(data);
     else updateClass(block.id, data);
     onSaved();
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h3>
-          <Icon name={isNew ? "flower" : "pencil"} size={20} color="var(--primary)" />
-          {isNew ? "Nueva clase" : "Editar clase"}
-        </h3>
-        {error && <div className="error">{error}</div>}
-        <label>Materia</label>
-        <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Ej. Cálculo II" />
-        <div className="row">
-          <div>
-            <label>Día</label>
-            <select value={day} onChange={(e) => setDay(Number(e.target.value) as DayOfWeek)}>
-              {WEEK_DAYS.map((d) => (
-                <option key={d} value={d}>
-                  {DAY_NAMES[d]}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label>Inicio</label>
-            <input type="time" value={start} onChange={(e) => setStart(e.target.value)} />
-          </div>
-          <div>
-            <label>Fin</label>
-            <input type="time" value={end} onChange={(e) => setEnd(e.target.value)} />
-          </div>
+    <Modal title={isNew ? "Nueva clase" : "Editar clase"} icon={isNew ? "flower" : "pencil"} onClose={onClose}>
+      {error && <div className="error">{error}</div>}
+      <label>Materia</label>
+      <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Ej. Cálculo II" />
+      <div className="row">
+        <div>
+          <label>Día</label>
+          <select value={day} onChange={(e) => setDay(Number(e.target.value) as DayOfWeek)}>
+            {WEEK_DAYS.map((d) => (
+              <option key={d} value={d}>
+                {DAY_NAMES[d]}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="row">
-          <div>
-            <label>Aula</label>
-            <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Ej. 204" />
-          </div>
-          <div>
-            <label>Profesor/a</label>
-            <input value={teacher} onChange={(e) => setTeacher(e.target.value)} placeholder="Ej. Prof. Ríos" />
-          </div>
+        <div>
+          <label>Inicio</label>
+          <input type="time" value={start} onChange={(e) => setStart(e.target.value)} />
         </div>
-        <label>Color</label>
-        <div className="color-picker">
-          {CLASS_COLORS.map((c) => (
-            <button
-              key={c}
-              type="button"
-              className={`color-dot${color === c ? " selected" : ""}`}
-              style={{ background: c }}
-              onClick={() => setColor(c)}
-              aria-label={`Color ${c}`}
-            />
-          ))}
-        </div>
-        <label>Notas</label>
-        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. Llevar laptop" rows={2} />
-        <div className="row">
-          <button onClick={submit}>
-            <Icon name="check" size={16} />
-            {isNew ? "Guardar" : "Actualizar"}
-          </button>
-          {!isNew && (
-            <button
-              className="danger"
-              onClick={() => {
-                if (confirm("¿Eliminar esta clase?")) {
-                  deleteClass(block.id);
-                  onSaved();
-                }
-              }}
-            >
-              <Icon name="trash" size={16} />
-              Eliminar
-            </button>
-          )}
-          <button className="ghost" onClick={onClose}>
-            <Icon name="x" size={16} />
-            Cancelar
-          </button>
+        <div>
+          <label>Fin</label>
+          <input type="time" value={end} onChange={(e) => setEnd(e.target.value)} />
         </div>
       </div>
-    </div>
+      <div className="row">
+        <div>
+          <label>Aula</label>
+          <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Ej. 204" />
+        </div>
+        <div>
+          <label>Profesor/a</label>
+          <input value={teacher} onChange={(e) => setTeacher(e.target.value)} placeholder="Ej. Prof. Ríos" />
+        </div>
+      </div>
+      <label>Color</label>
+      <div className="color-picker">
+        {CLASS_COLORS.map((c) => (
+          <button
+            key={c}
+            type="button"
+            className={`color-dot${color === c ? " selected" : ""}`}
+            style={{ background: c }}
+            onClick={() => setColor(c)}
+            aria-label={`Color ${c}`}
+          />
+        ))}
+      </div>
+      <label>Notas</label>
+      <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. Llevar laptop" rows={2} />
+      <div className="row modal-actions">
+        <button type="button" onClick={submit}>
+          <Icon name="check" size={16} />
+          {isNew ? "Guardar" : "Actualizar"}
+        </button>
+        {!isNew && (
+          <button
+            type="button"
+            className="danger"
+            onClick={() => {
+              if (confirm("¿Eliminar esta clase?")) {
+                deleteClass(block.id);
+                onSaved();
+              }
+            }}
+          >
+            <Icon name="trash" size={16} />
+            Eliminar
+          </button>
+        )}
+        <button type="button" className="ghost" onClick={onClose}>
+          Cancelar
+        </button>
+      </div>
+    </Modal>
   );
 }

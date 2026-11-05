@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Icon from "./Icon";
-import { usePlayer } from "../lib/player";
+import { usePlayer } from "../lib/playerContext";
 import { embedPlaylistUrl, embedTrackUrl } from "../lib/spotify";
 
 const SIZES = [

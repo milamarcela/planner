@@ -2,16 +2,38 @@
   "name": "StudyBloom — Planner Universitario",
   "short_name": "StudyBloom",
   "description": "Horarios de universidad, grupos de estudio y música con Spotify. Estética kawaii.",
-  "start_url": "/",
+  "id": "studybloom-app",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#fff5f7",
+  "orientation": "portrait",
+  "background_color": "#fdeef4",
   "theme_color": "#f7c8d8",
+  "lang": "es",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
