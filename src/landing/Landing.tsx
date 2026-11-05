@@ -18,6 +18,11 @@ const FEATURES: Array<{ icon: IconName; title: string; text: string }> = [
     text: "Conecta Spotify, mira qué suena ahora mismo y estudia con temporizador Pomodoro y playlists de concentración.",
   },
   {
+    icon: "book",
+    title: "Cuaderno por materia",
+    text: "Cada materia tiene apartados tipo notebook: notas de clase e imágenes (fotos de la pizarra, esquemas).",
+  },
+  {
     icon: "moon",
     title: "Tema claro y oscuro",
     text: "Diseño rosa coquette con modo oscuro automático según tu sistema. Se ve bien de día y de noche.",

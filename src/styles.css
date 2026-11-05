@@ -781,3 +781,179 @@ label {
   align-items: center;
   gap: 6px;
 }
+
+/* Navbar superior */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: -20px -16px 18px;
+  padding: 12px 18px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--border);
+}
+
+.navbar-logo {
+  font-size: 1.35rem;
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 5px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.navbar-links button {
+  background: transparent;
+  color: var(--text-soft);
+  box-shadow: none;
+  padding: 7px 12px;
+  font-size: 0.88rem;
+}
+
+.navbar-links button.active {
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+@media (max-width: 560px) {
+  .navbar-label {
+    display: none;
+  }
+  .navbar-links button {
+    padding: 7px 10px;
+  }
+}
+
+/* Animaciones de página y tarjetas */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: fadeUp 0.35s ease both;
+}
+
+.card {
+  animation: fadeUp 0.45s ease both;
+}
+
+.subject-card,
+.section-card {
+  animation: fadeUp 0.45s ease both;
+}
+
+/* Tarjetas de materias dinámicas */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.subject-card {
+  border: none;
+  border-top: 6px solid rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: #4a3542;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+:root[data-theme="dark"] .subject-card {
+  color: #2c2130;
+}
+
+.subject-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(224, 106, 156, 0.28);
+}
+
+.subject-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subject-name {
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.subject-meta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+/* Detalle de materia / apartados */
+.detail-header {
+  border-top-width: 6px;
+}
+
+.section-card .section-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  border: none;
+  background: transparent;
+  padding: 2px 0;
+  color: var(--primary-strong);
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.image-thumb {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  animation: fadeUp 0.3s ease both;
+}
+
+.image-thumb img {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  display: block;
+}
+
+.img-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 4px 6px;
+  font-size: 0;
+}
