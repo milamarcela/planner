@@ -8,9 +8,10 @@ import ScheduleView from "./views/ScheduleView";
 import SubjectsView from "./views/SubjectsView";
 import GroupsView from "./views/GroupsView";
 import StudyView from "./views/StudyView";
+import SpotifyView from "./views/SpotifyView";
 import { handleRedirectCallback } from "./lib/spotify";
 
-type Tab = "today" | "schedule" | "subjects" | "groups" | "study";
+type Tab = "today" | "schedule" | "subjects" | "groups" | "study" | "spotify";
 
 function useHashRoute(): "landing" | "app" {
   const [route, setRoute] = useState<"landing" | "app">(
@@ -69,6 +70,7 @@ function Planner() {
         {tab === "subjects" && <SubjectsView />}
         {tab === "groups" && <GroupsView />}
         {tab === "study" && <StudyView />}
+        {tab === "spotify" && <SpotifyView />}
       </main>
     </div>
   );

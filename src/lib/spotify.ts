@@ -137,6 +137,7 @@ export async function searchTracks(query: string, limit = 8): Promise<SpotifyTra
 }
 
 export interface NowPlaying {
+  id: string;
   name: string;
   artist: string;
   albumArt: string;
@@ -156,6 +157,7 @@ export async function getNowPlaying(): Promise<NowPlaying | null> {
     is_playing: boolean;
     progress_ms: number;
     item: {
+      id: string;
       name: string;
       duration_ms: number;
       artists: Array<{ name: string }>;
@@ -164,6 +166,7 @@ export async function getNowPlaying(): Promise<NowPlaying | null> {
   };
   if (!data.item) return null;
   return {
+    id: data.item.id,
     name: data.item.name,
     artist: data.item.artists.map((a) => a.name).join(", "),
     albumArt: data.item.album.images[1]?.url ?? data.item.album.images[0]?.url ?? "",

@@ -1312,3 +1312,82 @@ label {
   background: var(--primary);
   margin: 10px auto 0;
 }
+
+/* Now Playing grande (pestaña Spotify) */
+.np-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  border-radius: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft));
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-strong);
+  margin-top: 12px;
+}
+
+.np-card.np-empty {
+  background: var(--surface-2);
+  box-shadow: var(--shadow);
+}
+
+.np-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.np-art-lg {
+  width: 110px;
+  height: 110px;
+  border-radius: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(74, 53, 66, 0.3);
+}
+
+.np-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.np-name {
+  font-weight: 700;
+  font-size: 1.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.np-artist {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  margin-bottom: 10px;
+}
+
+.np-open {
+  margin-top: 10px;
+  background: var(--surface);
+  color: var(--primary-strong);
+  border: 2px solid var(--primary);
+  box-shadow: var(--shadow);
+  font-size: 0.85rem;
+  padding: 8px 14px;
+}
+
+@media (max-width: 480px) {
+  .np-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .np-art-lg {
+    width: 100%;
+    height: 150px;
+  }
+}

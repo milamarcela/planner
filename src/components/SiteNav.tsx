@@ -4,14 +4,15 @@ import { useTheme } from "../theme";
 import { getToken } from "../lib/spotify";
 import { getProfile } from "../lib/profile";
 
-type Tab = "today" | "schedule" | "subjects" | "groups" | "study";
+type Tab = "today" | "schedule" | "subjects" | "groups" | "study" | "spotify";
 
 const APP_TABS: Array<{ id: Tab; icon: IconName; label: string }> = [
   { id: "today", icon: "sparkle", label: "Hoy" },
   { id: "schedule", icon: "calendar", label: "Horario" },
   { id: "subjects", icon: "book", label: "Materias" },
   { id: "groups", icon: "users", label: "Grupos" },
-  { id: "study", icon: "music", label: "Estudiar" },
+  { id: "study", icon: "clock", label: "Estudiar" },
+  { id: "spotify", icon: "music", label: "Spotify" },
 ];
 
 export default function SiteNav({
