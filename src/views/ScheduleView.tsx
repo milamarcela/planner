@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CLASS_COLORS, DAY_NAMES, WEEK_DAYS } from "../types";
 import type { ClassBlock, DayOfWeek } from "../types";
+import Icon from "../components/Icon";
 import {
   addClass,
   classesForDay,
@@ -18,7 +19,10 @@ export default function ScheduleView() {
   return (
     <>
       <div className="card">
-        <h2>📅 Mi horario universitario</h2>
+        <h2>
+          <Icon name="calendar" size={22} color="var(--primary)" />
+          Mi horario universitario
+        </h2>
         <div className="grid-week">
           {WEEK_DAYS.map((d) => (
             <div className="day-col" key={d}>
@@ -27,21 +31,23 @@ export default function ScheduleView() {
                 <div
                   key={c.id}
                   className="class-chip"
-                  style={{ background: c.color }}
+                  style={{ background: c.color, borderTopColor: "rgba(255,255,255,0.85)" }}
                   onClick={() => setEditing(c)}
                 >
                   <span className="time">
+                    <Icon name="clock" size={12} />
                     {c.start}–{c.end}
                   </span>
                   {c.subject}
-                  {c.room && <span className="room"> · {c.room}</span>}
+                  {c.room && <span className="room">{c.room}</span>}
                 </div>
               ))}
             </div>
           ))}
         </div>
         <button style={{ marginTop: 8 }} onClick={() => setEditing({} as ClassBlock)}>
-          ＋ Agregar clase
+          <Icon name="plus" size={17} />
+          Agregar clase
         </button>
       </div>
       {editing && (
@@ -94,7 +100,10 @@ function ClassModal({
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h3>{isNew ? "🌷 Nueva clase" : "✏️ Editar clase"}</h3>
+        <h3>
+          <Icon name={isNew ? "flower" : "pencil"} size={20} color="var(--primary)" />
+          {isNew ? "Nueva clase" : "Editar clase"}
+        </h3>
         {error && <div className="error">{error}</div>}
         <label>Materia</label>
         <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Ej. Cálculo II" />
@@ -142,9 +151,12 @@ function ClassModal({
           ))}
         </div>
         <label>Notas</label>
-        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. Llevar laptop 💻" rows={2} />
+        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. Llevar laptop" rows={2} />
         <div className="row">
-          <button onClick={submit}>{isNew ? "💾 Guardar" : "💾 Actualizar"}</button>
+          <button onClick={submit}>
+            <Icon name="check" size={16} />
+            {isNew ? "Guardar" : "Actualizar"}
+          </button>
           {!isNew && (
             <button
               className="danger"
@@ -155,10 +167,12 @@ function ClassModal({
                 }
               }}
             >
+              <Icon name="trash" size={16} />
               Eliminar
             </button>
           )}
           <button className="ghost" onClick={onClose}>
+            <Icon name="x" size={16} />
             Cancelar
           </button>
         </div>

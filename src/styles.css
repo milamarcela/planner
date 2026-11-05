@@ -1,40 +1,40 @@
 :root {
-  --font-main: "Quicksand", "Comic Sans MS", system-ui, sans-serif;
+  --font-main: "Quicksand", "Segoe UI", system-ui, sans-serif;
   --font-cute: "Pacifico", "Quicksand", cursive;
 }
 
 :root[data-theme="light"] {
-  --bg: #fff5f7;
-  --bg-soft: #ffeef4;
-  --surface: #fffdfb;
-  --surface-2: #fff0f5;
-  --text: #5b4356;
-  --text-soft: #9c7f8f;
-  --primary: #e78fb3;
-  --primary-strong: #d6739f;
-  --primary-soft: #fbd9e5;
-  --accent: #a58ae0;
-  --accent-soft: #e6dcfb;
-  --danger: #e07a8b;
-  --shadow: 0 6px 18px rgba(214, 115, 159, 0.18);
-  --border: #f6d3e0;
+  --bg: #fdeef4;
+  --bg-soft: #fbdde9;
+  --surface: #fffafc;
+  --surface-2: #ffe9f1;
+  --text: #6b4356;
+  --text-soft: #a87f92;
+  --primary: #ef8fb4;
+  --primary-strong: #e06a9c;
+  --primary-soft: #f9c9dc;
+  --accent: #9d8bd8;
+  --accent-soft: #e4dcf8;
+  --danger: #d95f7d;
+  --shadow: 0 6px 18px rgba(224, 106, 156, 0.16);
+  --border: #f3c4d8;
 }
 
 :root[data-theme="dark"] {
-  --bg: #241b26;
-  --bg-soft: #2d2230;
-  --surface: #312639;
-  --surface-2: #3a2d42;
-  --text: #f6e9ef;
-  --text-soft: #c4a7b8;
-  --primary: #f0a6c0;
-  --primary-strong: #f7c0d4;
-  --primary-soft: #4a3344;
-  --accent: #c3aef5;
-  --accent-soft: #453a5e;
-  --danger: #f08ba0;
+  --bg: #2a1f2b;
+  --bg-soft: #352838;
+  --surface: #382b3b;
+  --surface-2: #443448;
+  --text: #f8e9f0;
+  --text-soft: #c9a3b6;
+  --primary: #f2a4c3;
+  --primary-strong: #f7bcd2;
+  --primary-soft: #573a4d;
+  --accent: #bda9ec;
+  --accent-soft: #4d4266;
+  --danger: #f08aa0;
   --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  --border: #4a3a4d;
+  --border: #553c50;
 }
 
 * {
@@ -52,8 +52,8 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  background-image: radial-gradient(var(--primary-soft) 1.5px, transparent 1.5px);
-  background-size: 26px 26px;
+  background-image: radial-gradient(var(--primary-soft) 1.4px, transparent 1.4px);
+  background-size: 28px 28px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -74,7 +74,9 @@ body {
   font-family: var(--font-cute);
   font-size: 2rem;
   color: var(--primary-strong);
-  text-shadow: 0 2px 0 var(--primary-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .card {
@@ -90,6 +92,9 @@ body {
 .card h3 {
   margin: 0 0 10px;
   color: var(--primary-strong);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 button {
@@ -103,6 +108,10 @@ button {
   color: #fff;
   box-shadow: var(--shadow);
   transition: transform 0.12s ease, background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 }
 
 button:hover {
@@ -170,7 +179,7 @@ label {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 6px;
+  gap: 4px;
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: 999px;
@@ -185,7 +194,7 @@ label {
   color: var(--text-soft);
   box-shadow: none;
   padding: 8px 12px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   white-space: nowrap;
 }
 
@@ -215,7 +224,11 @@ label {
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-top-width: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 :root[data-theme="dark"] .class-chip {
@@ -224,7 +237,9 @@ label {
 
 .class-chip .time {
   font-weight: 700;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .class-chip .room {
@@ -242,11 +257,15 @@ label {
   border: 2px solid var(--border);
 }
 
-.today-item .dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
+.today-item .icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: #4a3542;
 }
 
 .modal-backdrop {
@@ -341,6 +360,9 @@ label {
   padding: 4px 12px;
   font-size: 0.8rem;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .timer-display {
@@ -386,6 +408,10 @@ label {
   color: var(--text-soft);
 }
 
+.track-item button {
+  padding: 8px 10px;
+}
+
 .spotify-frame {
   width: 100%;
   height: 152px;
@@ -399,8 +425,7 @@ label {
   color: var(--text);
   box-shadow: none;
   border: 2px solid var(--border);
-  font-size: 1.1rem;
-  padding: 8px 14px;
+  padding: 8px 12px;
 }
 
 .empty {
@@ -427,4 +452,8 @@ label {
   font-size: 0.75rem;
   color: var(--text-soft);
   font-weight: 700;
+}
+
+.icon-btn {
+  padding: 8px 10px;
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { StudyGroup } from "../types";
+import Icon from "../components/Icon";
 import {
   createGroup,
   deleteGroup,
@@ -19,9 +20,12 @@ export default function GroupsView() {
   return (
     <>
       <div className="card">
-        <h2>👯 Grupos de estudio</h2>
+        <h2>
+          <Icon name="users" size={22} color="var(--primary)" />
+          Grupos de estudio
+        </h2>
         <p className="muted">
-          Crea un grupo y comparte el código con tus amigas para estudiar juntas. 💕
+          Crea un grupo y comparte el código con tus amigas para estudiar juntas.
           <br />
           <em>En este prototipo los grupos viven en este dispositivo; con un backend se sincronizarán entre usuarias.</em>
         </p>
@@ -35,14 +39,17 @@ export default function GroupsView() {
           }}
         />
         <div className="row">
-          <button onClick={() => setShowCreate(true)}>🌸 Crear grupo</button>
+          <button onClick={() => setShowCreate(true)}>
+            <Icon name="flower" size={16} />
+            Crear grupo
+          </button>
           <JoinByCode onJoined={rerender} />
         </div>
       </div>
 
       {groups.length === 0 ? (
         <div className="card">
-          <p className="empty">Aún no hay grupos. ¡Crea el primero y comparte el código! 💌</p>
+          <p className="empty">Aún no hay grupos. Crea el primero y comparte el código.</p>
         </div>
       ) : (
         groups.map((g) => (
@@ -71,7 +78,8 @@ function JoinByCode({ onJoined }: { onJoined: () => void }) {
   if (!open) {
     return (
       <button className="secondary" onClick={() => setOpen(true)}>
-        🔑 Unirme con código
+        <Icon name="key" size={16} />
+        Unirme con código
       </button>
     );
   }
@@ -95,9 +103,12 @@ function JoinByCode({ onJoined }: { onJoined: () => void }) {
           placeholder="Código (6 letras)"
           style={{ marginBottom: 0 }}
         />
-        <button onClick={submit}>Unirme ✨</button>
-        <button className="ghost" onClick={() => setOpen(false)}>
-          ✕
+        <button onClick={submit}>
+          <Icon name="check" size={16} />
+          Unirme
+        </button>
+        <button className="ghost icon-btn" onClick={() => setOpen(false)} aria-label="Cerrar">
+          <Icon name="x" size={16} />
         </button>
       </div>
     </div>
@@ -125,22 +136,29 @@ function CreateGroupModal({
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h3>🌸 Nuevo grupo de estudio</h3>
+        <h3>
+          <Icon name="flower" size={20} color="var(--primary)" />
+          Nuevo grupo de estudio
+        </h3>
         {error && <div className="error">{error}</div>}
         <label>Nombre del grupo</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej. Las Cerezas 📚" />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej. Las Cerezas" />
         <label>Materia</label>
         <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Ej. Química Orgánica" />
         <label>Descripción</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Ej. Repasamos capítulo 4 los martes 🎀"
+          placeholder="Ej. Repasamos el capítulo 4 los martes"
           rows={2}
         />
         <div className="row">
-          <button onClick={submit}>Crear 💕</button>
+          <button onClick={submit}>
+            <Icon name="heart" size={16} />
+            Crear
+          </button>
           <button className="ghost" onClick={onClose}>
+            <Icon name="x" size={16} />
             Cancelar
           </button>
         </div>
@@ -154,7 +172,8 @@ function GroupCard({ group, onChanged }: { group: StudyGroup; onChanged: () => v
   return (
     <div className="card group-card">
       <h3>
-        💌 {group.name} <span className="muted">· {group.subject}</span>
+        <Icon name="ribbon" size={20} color="var(--accent)" />
+        {group.name} <span className="muted">· {group.subject}</span>
       </h3>
       {group.description && <p className="muted">{group.description}</p>}
       <div>
@@ -163,7 +182,8 @@ function GroupCard({ group, onChanged }: { group: StudyGroup; onChanged: () => v
       <div className="chip-list">
         {group.members.map((m) => (
           <span key={m} className="member-chip">
-            {m === myName ? `${m} (tú) 🌟` : m}
+            <Icon name="heart" size={12} color="var(--primary)" />
+            {m === myName ? `${m} (tú)` : m}
           </span>
         ))}
       </div>
@@ -187,6 +207,7 @@ function GroupCard({ group, onChanged }: { group: StudyGroup; onChanged: () => v
             }
           }}
         >
+          <Icon name="trash" size={15} />
           Eliminar grupo
         </button>
       </div>

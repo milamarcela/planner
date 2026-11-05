@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ThemeContext, initialTheme } from "./theme";
 import type { Theme } from "./theme";
+import Icon from "./components/Icon";
 import TodayView from "./views/TodayView";
 import ScheduleView from "./views/ScheduleView";
 import GroupsView from "./views/GroupsView";
@@ -9,11 +10,11 @@ import { handleRedirectCallback } from "./lib/spotify";
 
 type Tab = "today" | "schedule" | "groups" | "study";
 
-const TABS: Array<{ id: Tab; label: string }> = [
-  { id: "today", label: "🌸 Hoy" },
-  { id: "schedule", label: "📅 Horario" },
-  { id: "groups", label: "👯 Grupos" },
-  { id: "study", label: "🎧 Estudiar" },
+const TABS: Array<{ id: Tab; icon: "sparkle" | "calendar" | "users" | "music"; label: string }> = [
+  { id: "today", icon: "sparkle", label: "Hoy" },
+  { id: "schedule", icon: "calendar", label: "Horario" },
+  { id: "groups", icon: "users", label: "Grupos" },
+  { id: "study", icon: "music", label: "Estudiar" },
 ];
 
 export default function App() {
@@ -29,19 +30,18 @@ export default function App() {
     void handleRedirectCallback();
   }, []);
 
+  const toggle = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+
   return (
-    <ThemeContext.Provider
-      value={{ theme, toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")) }}
-    >
+    <ThemeContext.Provider value={{ theme, toggleTheme: toggle }}>
       <div className="app">
         <header className="header">
-          <div className="logo">StudyBloom 🌸</div>
-          <button
-            className="theme-toggle"
-            onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-            aria-label="Cambiar tema"
-          >
-            {theme === "light" ? "🌙" : "☀️"}
+          <div className="logo">
+            <Icon name="flower" size={30} color="var(--primary)" />
+            StudyBloom
+          </div>
+          <button className="theme-toggle" onClick={toggle} aria-label="Cambiar tema">
+            <Icon name={theme === "light" ? "moon" : "sun"} size={20} />
           </button>
         </header>
         {tab === "today" && <TodayView />}
@@ -55,6 +55,7 @@ export default function App() {
               className={tab === t.id ? "active" : ""}
               onClick={() => setTab(t.id)}
             >
+              <Icon name={t.icon} size={17} />
               {t.label}
             </button>
           ))}

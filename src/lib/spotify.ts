@@ -127,7 +127,7 @@ export function embedPlaylistUrl(playlistId: string): string {
 }
 
 export const FOCUS_PLAYLISTS: Array<{ id: string; title: string }> = [
-  { id: "37i9dQZF1DX5trt9i14X7j", title: "lofi hip hop radio 📚 beats to relax/study to" },
-  { id: "37i9dQZF1DX4WYUdFAU4U", title: "Peaceful Piano 🎹" },
-  { id: "37i9dQZF1DWZqd5Ixl2K35", title: "Café & Jazz ☕" },
+  { id: "37i9dQZF1DX5trt9i14X7j", title: "lofi hip hop radio — beats to relax/study to" },
+  { id: "37i9dQZF1DX4WYUdFAU4U", title: "Peaceful Piano" },
+  { id: "37i9dQZF1DWZqd5Ixl2K35", title: "Café & Jazz" },
 ];

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Icon from "../components/Icon";
 import { getGroups, getMyName } from "../lib/groups";
 import { finishSession, getSessions, startSession } from "../lib/sessions";
 import {
@@ -62,11 +63,12 @@ export default function StudyView() {
   return (
     <>
       <div className="card">
-        <h2>🍓 Modo estudio</h2>
-        <div className="timer-display">
-          {mm}:{ss}
-        </div>
-        <div className="row" style={{ maxWidth: 280, margin: "0 auto 10px" }}>
+        <h2>
+          <Icon name="clock" size={22} color="var(--primary)" />
+          Modo estudio
+        </h2>
+        <div className="timer-display">{mm}:{ss}</div>
+        <div className="row" style={{ maxWidth: 300, margin: "0 auto 10px" }}>
           {[15, 25, 45, 60].map((m) => (
             <button
               key={m}
@@ -84,7 +86,7 @@ export default function StudyView() {
           <>
             <label>Grupo de estudio (opcional)</label>
             <select value={groupId} onChange={(e) => setGroupId(e.target.value)}>
-              <option value="">Solo yo 🌙</option>
+              <option value="">Solo yo</option>
               {myGroups.map((g) => (
                 <option key={g.id} value={g.id}>
                   {g.name} · {g.subject}
@@ -95,18 +97,23 @@ export default function StudyView() {
         )}
         <div className="row">
           {!running ? (
-            <button onClick={start}>▶ Empezar a estudiar</button>
+            <button onClick={start}>
+              <Icon name="play" size={16} />
+              Empezar a estudiar
+            </button>
           ) : (
             <button className="secondary" onClick={() => setRunning(false)}>
-              ⏸ Pausar
+              <Icon name="pause" size={16} />
+              Pausar
             </button>
           )}
           <button className="ghost" onClick={reset}>
-            ↺ Reiniciar
+            <Icon name="reset" size={16} />
+            Reiniciar
           </button>
         </div>
         <p className="muted" style={{ textAlign: "center", marginTop: 10 }}>
-          Sesiones completadas: <strong>{completed + done}</strong> 🎀
+          Sesiones completadas: <strong>{completed + done}</strong>
         </p>
       </div>
       <MusicPanel />
@@ -131,7 +138,10 @@ function MusicPanel() {
 
   return (
     <div className="card">
-      <h2>🎧 Música con Spotify</h2>
+      <h2>
+        <Icon name="music" size={22} color="var(--primary)" />
+        Música con Spotify
+      </h2>
       {!isSpotifyConfigured() && (
         <p className="muted">
           Para buscar música necesitas crear una app en{" "}
@@ -140,7 +150,7 @@ function MusicPanel() {
           </a>{" "}
           y poner su <em>Client ID</em> en <code>VITE_SPOTIFY_CLIENT_ID</code> (archivo <code>.env</code>), con la
           URL de redirección <code>{typeof window !== "undefined" ? window.location.origin : ""}</code> registrada.
-          Mientras tanto, disfruta estas playlists de study vibes:
+          Mientras tanto, disfruta estas playlists para estudiar:
         </p>
       )}
       <div className="row">
@@ -153,7 +163,8 @@ function MusicPanel() {
               setResults([]);
             }}
           >
-            Desconectar Spotify 👋
+            <Icon name="logout" size={16} />
+            Desconectar Spotify
           </button>
         ) : (
           <button
@@ -165,7 +176,8 @@ function MusicPanel() {
               }
             }}
           >
-            Conectar Spotify 💚
+            <Icon name="heart" size={16} />
+            Conectar Spotify
           </button>
         )}
       </div>
@@ -179,7 +191,9 @@ function MusicPanel() {
             placeholder="Busca una canción o artista…"
             style={{ marginBottom: 0 }}
           />
-          <button onClick={() => void search()}>🔍</button>
+          <button className="icon-btn" onClick={() => void search()} aria-label="Buscar">
+            <Icon name="search" size={18} />
+          </button>
         </div>
       )}
       {results.map((t) => (
@@ -190,8 +204,8 @@ function MusicPanel() {
               <div className="name">{t.name}</div>
               <div className="artist">{t.artist}</div>
             </div>
-            <button onClick={() => setPlaying(playing === t.id ? null : t.id)}>
-              {playing === t.id ? "⏹" : "▶"}
+            <button onClick={() => setPlaying(playing === t.id ? null : t.id)} aria-label="Reproducir">
+              <Icon name={playing === t.id ? "pause" : "play"} size={16} />
             </button>
           </div>
           {playing === t.id && (
@@ -199,7 +213,10 @@ function MusicPanel() {
           )}
         </div>
       ))}
-      <h3 style={{ marginTop: 14 }}>🌷 Playlists para estudiar</h3>
+      <h3 style={{ marginTop: 14 }}>
+        <Icon name="flower" size={18} color="var(--accent)" />
+        Playlists para estudiar
+      </h3>
       {FOCUS_PLAYLISTS.map((p) => (
         <details key={p.id} style={{ marginBottom: 8 }}>
           <summary style={{ cursor: "pointer", fontWeight: 700 }}>{p.title}</summary>
