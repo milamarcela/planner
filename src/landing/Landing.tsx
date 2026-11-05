@@ -1,31 +1,42 @@
 import Icon from "../components/Icon";
 import type { IconName } from "../components/Icon";
 
-const FEATURES: Array<{ icon: IconName; title: string; text: string }> = [
+const FEATURES: Array<{ icon: IconName; title: string; text: string; tint: string }> = [
   {
     icon: "calendar",
     title: "Horario universitario",
-    text: "Organiza tus clases por día y hora con colores, aulas y profesores. Detecta traslapes al instante.",
-  },
-  {
-    icon: "users",
-    title: "Grupos de estudio",
-    text: "Crea grupos, comparte un código de invitación y estudia con tus amigas desde cualquier dispositivo.",
-  },
-  {
-    icon: "music",
-    title: "Spotify + modo foco",
-    text: "Conecta Spotify, mira qué suena ahora mismo y estudia con temporizador Pomodoro y playlists de concentración.",
+    text: "Tus clases por día y hora con colores, aulas y profesores. Detecta traslapes al instante.",
+    tint: "#f6a8c0",
   },
   {
     icon: "book",
     title: "Cuaderno por materia",
-    text: "Cada materia tiene apartados tipo notebook: notas de clase e imágenes (fotos de la pizarra, esquemas).",
+    text: "Apartados tipo notebook con notas e imágenes: fotos de la pizarra, esquemas, PDFs.",
+    tint: "#cdb4f6",
+  },
+  {
+    icon: "users",
+    title: "Grupos de estudio",
+    text: "Crea un grupo y comparte un código de invitación para estudiar con tus amigas.",
+    tint: "#a8d8f0",
+  },
+  {
+    icon: "music",
+    title: "Spotify + modo foco",
+    text: "Widget de lo que suena ahora, búsqueda de canciones y temporizador Pomodoro.",
+    tint: "#b8e6c8",
+  },
+  {
+    icon: "clock",
+    title: "Modo estudio",
+    text: "Sesiones de concentración con historial de minutos de foco acumulados.",
+    tint: "#ffe3a3",
   },
   {
     icon: "moon",
     title: "Tema claro y oscuro",
-    text: "Diseño rosa coquette con modo oscuro automático según tu sistema. Se ve bien de día y de noche.",
+    text: "Diseño rosa coquette con modo oscuro que respeta las preferencias de tu sistema.",
+    tint: "#f5a8d0",
   },
 ];
 
@@ -38,16 +49,17 @@ const STEPS = [
 export default function Landing({ onEnter }: { onEnter: () => void }) {
   return (
     <div className="landing">
+      <div className="hero-bg" aria-hidden="true" />
       <header className="landing-nav">
         <div className="logo">
           <Icon name="flower" size={28} color="var(--primary)" />
           StudyBloom
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <a className="btn-link" href="#features">
             Funciones
           </a>
-          <button onClick={onEnter}>
+          <button className="btn-solid" onClick={onEnter}>
             <Icon name="sparkle" size={16} />
             Abrir la app
           </button>
@@ -65,29 +77,29 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
           <span className="hero-accent">estudia con estilo.</span>
         </h1>
         <p className="hero-sub">
-          Horarios, grupos de estudio y música con Spotify en una sola app. Diseñada para verse linda y
-          funcionar en tu PC y en tu celular.
+          Horarios, cuadernos por materia, grupos de estudio y música con Spotify en una sola app.
+          Linda por fuera, poderosa por dentro — en tu PC y en tu celular.
         </p>
         <div className="hero-cta">
-          <button className="btn-lg" onClick={onEnter}>
+          <button className="btn-lg btn-solid" onClick={onEnter}>
             <Icon name="calendar" size={18} />
             Empezar ahora — es gratis
           </button>
-          <a className="btn-lg ghost" href="#features">
+          <a className="btn-lg btn-outline" href="#features">
             Ver funciones
           </a>
         </div>
         <div className="hero-preview card">
           <div className="preview-grid">
-            <div className="preview-col" style={{ background: "#f6a8c0" }}>
+            <div className="preview-col" style={{ background: "linear-gradient(160deg,#f6a8c0,#f08bb0)" }}>
               <strong>Cálculo II</strong>
               <span>08:00–10:00 · Aula 204</span>
             </div>
-            <div className="preview-col" style={{ background: "#cdb4f6" }}>
+            <div className="preview-col" style={{ background: "linear-gradient(160deg,#cdb4f6,#b39ae8)" }}>
               <strong>Química</strong>
               <span>10:30–12:00 · Lab 1</span>
             </div>
-            <div className="preview-col" style={{ background: "#a8d8f0" }}>
+            <div className="preview-col" style={{ background: "linear-gradient(160deg,#a8d8f0,#8ec4e4)" }}>
               <strong>Psicología</strong>
               <span>14:00–16:00 · Aula B8</span>
             </div>
@@ -107,8 +119,8 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
         <div className="features-grid">
           {FEATURES.map((f) => (
             <div className="card feature-card" key={f.title}>
-              <span className="feature-icon">
-                <Icon name={f.icon} size={24} />
+              <span className="feature-icon" style={{ background: f.tint }}>
+                <Icon name={f.icon} size={24} color="#4a3542" />
               </span>
               <h3>{f.title}</h3>
               <p className="muted">{f.text}</p>
@@ -131,12 +143,15 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
             </div>
           ))}
         </div>
-        <div style={{ textAlign: "center", marginTop: 26 }}>
-          <button className="btn-lg" onClick={onEnter}>
-            <Icon name="heart" size={17} />
-            Crear mi planner
-          </button>
-        </div>
+      </section>
+
+      <section className="cta-banner">
+        <h2>¿Lista para organizar tu semestre?</h2>
+        <p>Tus datos se guardan en tu dispositivo. Sin registros, sin complicaciones.</p>
+        <button className="btn-lg btn-solid btn-on-accent" onClick={onEnter}>
+          <Icon name="heart" size={17} />
+          Crear mi planner
+        </button>
       </section>
 
       <footer className="landing-footer">
@@ -144,7 +159,7 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
           <Icon name="flower" size={22} color="var(--primary)" />
           StudyBloom
         </div>
-        <p className="muted">Hecho con cariño para estudiantes. Tus datos se guardan en tu dispositivo.</p>
+        <p className="muted">Hecho con cariño para estudiantes.</p>
       </footer>
     </div>
   );
