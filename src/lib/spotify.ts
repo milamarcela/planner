@@ -5,7 +5,12 @@ const API = "https://api.spotify.com/v1";
 export const SPOTIFY_CLIENT_ID =
   (import.meta.env.VITE_SPOTIFY_CLIENT_ID as string | undefined) ?? "";
 
-const SCOPES = ["user-read-email", "playlist-read-private", "user-modify-playback-state"].join(" ");
+const SCOPES = [
+  "user-read-email",
+  "playlist-read-private",
+  "user-read-playback-state",
+  "user-read-currently-playing",
+].join(" ");
 const TOKEN_KEY = "studybloom:spotifyToken";
 
 export function isSpotifyConfigured(): boolean {
@@ -116,6 +121,43 @@ export async function searchTracks(query: string, limit = 8): Promise<SpotifyTra
     albumArt: t.album.images[1]?.url ?? t.album.images[0]?.url ?? "",
     uri: t.uri,
   }));
+}
+
+export interface NowPlaying {
+  name: string;
+  artist: string;
+  albumArt: string;
+  progressMs: number;
+  durationMs: number;
+  isPlaying: boolean;
+}
+
+export async function getNowPlaying(): Promise<NowPlaying | null> {
+  const token = getToken();
+  if (!token) return null;
+  const res = await fetch(`${API}/me/player/currently-playing`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (res.status === 204 || !res.ok) return null;
+  const data = (await res.json()) as {
+    is_playing: boolean;
+    progress_ms: number;
+    item: {
+      name: string;
+      duration_ms: number;
+      artists: Array<{ name: string }>;
+      album: { images: Array<{ url: string }> };
+    } | null;
+  };
+  if (!data.item) return null;
+  return {
+    name: data.item.name,
+    artist: data.item.artists.map((a) => a.name).join(", "),
+    albumArt: data.item.album.images[1]?.url ?? data.item.album.images[0]?.url ?? "",
+    progressMs: data.progress_ms,
+    durationMs: data.item.duration_ms,
+    isPlaying: data.is_playing,
+  };
 }
 
 export function embedTrackUrl(trackId: string): string {

@@ -7,6 +7,7 @@ import ScheduleView from "./views/ScheduleView";
 import GroupsView from "./views/GroupsView";
 import StudyView from "./views/StudyView";
 import { handleRedirectCallback } from "./lib/spotify";
+import { getProfile } from "./lib/profile";
 
 type Tab = "today" | "schedule" | "groups" | "study";
 
@@ -40,6 +41,9 @@ export default function App() {
             <Icon name="flower" size={30} color="var(--primary)" />
             StudyBloom
           </div>
+          {getProfile().avatar && (
+            <img src={getProfile().avatar} alt="Perfil" className="header-avatar" />
+          )}
           <button className="theme-toggle" onClick={toggle} aria-label="Cambiar tema">
             <Icon name={theme === "light" ? "moon" : "sun"} size={20} />
           </button>

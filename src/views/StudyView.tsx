@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "../components/Icon";
+import NowPlaying from "../components/NowPlaying";
 import { getGroups, getMyName } from "../lib/groups";
 import { finishSession, getSessions, startSession } from "../lib/sessions";
 import {
@@ -182,6 +183,7 @@ function MusicPanel() {
         )}
       </div>
       {error && <div className="error">{error}</div>}
+      {connected && <NowPlaying />}
       {connected && (
         <div className="row" style={{ marginTop: 10 }}>
           <input

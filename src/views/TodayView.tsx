@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { DAY_NAMES } from "../types";
 import type { ClassBlock } from "../types";
 import Icon from "../components/Icon";
+import ProfileCard from "../components/ProfileCard";
 import { todayClasses, deleteClass } from "../lib/schedule";
 import { getGroups, getMyName } from "../lib/groups";
 import { totalFocusMinutes } from "../lib/sessions";
@@ -21,6 +22,7 @@ export default function TodayView() {
 
   return (
     <>
+      <ProfileCard />
       <div className="card">
         <h2>
           <Icon name="sparkle" size={22} color="var(--primary)" />
