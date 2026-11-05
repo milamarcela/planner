@@ -281,7 +281,19 @@ label {
   align-items: flex-end;
   justify-content: center;
   z-index: 20;
-  padding: 16px;
+  padding: 16px 16px 104px;
+}
+
+@media (min-width: 900px) {
+  .modal-backdrop {
+    align-items: center;
+    padding: 24px;
+  }
+  .modal {
+    border-radius: 26px;
+    border-bottom: 2px solid var(--border);
+    max-height: 80vh;
+  }
 }
 
 .modal {
@@ -1929,4 +1941,19 @@ body {
 
 .card {
   overflow-wrap: break-word;
+}
+
+/* Margen inferior para que el mini reproductor fijo no tape el contenido */
+main.page {
+  padding-bottom: 110px;
+}
+
+.app {
+  padding-bottom: 150px;
+}
+
+@media (min-width: 900px) {
+  .app {
+    padding-bottom: 150px;
+  }
 }
