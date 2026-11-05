@@ -53,10 +53,11 @@ export default function SubjectsView() {
         </div>
       ) : (
         <div className="subjects-grid">
-          {cards.map((c) => (
+          {cards.map((c, i) => (
             <SubjectCardView
               key={c.subject}
               card={c}
+              pattern={i % 4}
               onOpen={() => setSelected(c.subject)}
             />
           ))}
@@ -68,14 +69,16 @@ export default function SubjectsView() {
 
 function SubjectCardView({
   card,
+  pattern,
   onOpen,
 }: {
   card: SubjectCard;
+  pattern: number;
   onOpen: () => void;
 }) {
   return (
     <button
-      className="subject-card"
+      className={`subject-card pat-${pattern}`}
       style={{ background: `linear-gradient(160deg, ${card.color}, ${card.color}b3)` }}
       onClick={onOpen}
     >
