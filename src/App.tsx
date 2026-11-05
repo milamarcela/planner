@@ -9,7 +9,7 @@ import ScheduleView from "./views/ScheduleView";
 import SubjectsView from "./views/SubjectsView";
 import GroupsView from "./views/GroupsView";
 import StudyView from "./views/StudyView";
-import { handleRedirectCallback } from "./lib/spotify";
+import { getToken, handleRedirectCallback } from "./lib/spotify";
 import { getProfile } from "./lib/profile";
 
 type Tab = "today" | "schedule" | "subjects" | "groups" | "study";
@@ -67,6 +67,12 @@ function Planner() {
             StudyBloom
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {getToken() && (
+              <span className="spotify-chip" title="Spotify vinculado">
+                <Icon name="music" size={14} />
+                Spotify
+              </span>
+            )}
             {getProfile().avatar && (
               <img src={getProfile().avatar} alt="Perfil" className="header-avatar" />
             )}

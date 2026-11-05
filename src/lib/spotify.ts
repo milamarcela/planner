@@ -40,13 +40,16 @@ export async function connectSpotify(): Promise<void> {
     );
   }
   const verifier = base64Url(crypto.getRandomValues(new Uint8Array(48)).buffer as ArrayBuffer);
+  const state = base64Url(crypto.getRandomValues(new Uint8Array(24)).buffer as ArrayBuffer);
   sessionStorage.setItem("studybloom:pkceVerifier", verifier);
+  sessionStorage.setItem("studybloom:oauthState", state);
   const challenge = base64Url(await sha256(verifier));
   const params = new URLSearchParams({
     response_type: "code",
     client_id: SPOTIFY_CLIENT_ID,
     scope: SCOPES,
     redirect_uri: redirectUri(),
+    state,
     code_challenge_method: "S256",
     code_challenge: challenge,
   });
@@ -58,7 +61,9 @@ export async function handleRedirectCallback(): Promise<boolean> {
   const code = params.get("code");
   if (!code) return false;
   const verifier = sessionStorage.getItem("studybloom:pkceVerifier");
-  if (!verifier) return false;
+  const expectedState = sessionStorage.getItem("studybloom:oauthState");
+  if (!verifier || !expectedState || params.get("state") !== expectedState) return false;
+  sessionStorage.removeItem("studybloom:oauthState");
   const res = await fetch(TOKEN_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

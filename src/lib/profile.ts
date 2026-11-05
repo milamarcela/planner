@@ -30,7 +30,14 @@ export function readImageFile(file: File, maxBytes = 1_500_000): Promise<string>
       return;
     }
     const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
+    reader.onload = () => {
+      const result = String(reader.result);
+      if (!result.startsWith("data:image/")) {
+        reject(new Error("El archivo no es una imagen válida."));
+        return;
+      }
+      resolve(result);
+    };
     reader.onerror = () => reject(new Error("No pude leer la imagen."));
     reader.readAsDataURL(file);
   });

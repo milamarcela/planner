@@ -1,16 +1,16 @@
 import { useRef, useState } from "react";
 import Icon from "../components/Icon";
-import type { SubjectCard } from "../lib/notes";
+import type { BlockType, NoteBlock, NoteSection, SubjectCard } from "../lib/notes";
 import {
-  addImage,
+  addBlock,
   addSection,
   deleteSection,
   getSections,
   getSubjectCards,
-  removeImage,
-  updateSection,
+  removeBlock,
+  updateBlock,
+  updateSectionTitle,
 } from "../lib/notes";
-import type { NoteSection } from "../lib/notes";
 import { readImageFile } from "../lib/profile";
 
 export default function SubjectsView() {
@@ -41,7 +41,8 @@ export default function SubjectsView() {
           Mis materias
         </h2>
         <p className="muted">
-          Cada materia tiene su cuaderno: crea apartados con notas e imágenes (fotos de la pizarra, PDFs, etc.).
+          Cada materia tiene su cuaderno: crea apartados con bloques al estilo Notion — títulos, texto,
+          tareas, listas, citas e imágenes.
         </p>
       </div>
       {cards.length === 0 ? (
@@ -102,11 +103,6 @@ function SubjectDetail({
   const rerender = () => force((n) => n + 1);
   const sections = getSections(subject);
 
-  const addNew = () => {
-    addSection(subject, color, "");
-    rerender();
-  };
-
   return (
     <>
       <div className="card detail-header" style={{ borderTop: `6px solid ${color}` }}>
@@ -119,27 +115,33 @@ function SubjectDetail({
             {subject}
           </h2>
         </div>
-        <button style={{ marginTop: 12 }} onClick={addNew}>
+        <button style={{ marginTop: 12 }} onClick={() => {
+          addSection(subject, color, "");
+          rerender();
+        }}>
           <Icon name="plus" size={16} />
           Nuevo apartado
         </button>
       </div>
       {sections.length === 0 && (
         <div className="card">
-          <p className="empty">Sin apartados todavía. Crea uno para tomar notas e incluir imágenes.</p>
+          <p className="empty">Sin apartados todavía. Crea uno y empieza a escribir con bloques.</p>
         </div>
       )}
       {sections.map((s) => (
-        <SectionCard
-          key={s.id}
-          subject={subject}
-          section={s}
-          onChanged={rerender}
-        />
+        <SectionCard key={s.id} subject={subject} section={s} onChanged={rerender} />
       ))}
     </>
   );
 }
+
+const BLOCK_MENU: Array<{ type: BlockType; label: string; icon: "plus" | "check" | "book" | "heart" | "flower" }> = [
+  { type: "heading", label: "Título", icon: "book" },
+  { type: "paragraph", label: "Texto", icon: "plus" },
+  { type: "todo", label: "Tarea", icon: "check" },
+  { type: "bullet", label: "Lista", icon: "flower" },
+  { type: "quote", label: "Cita", icon: "heart" },
+];
 
 function SectionCard({
   subject,
@@ -158,7 +160,7 @@ function SectionCard({
     setError("");
     try {
       const dataUrl = await readImageFile(file);
-      addImage(subject, section.id, dataUrl);
+      addBlock(subject, section.id, "image", dataUrl);
       onChanged();
     } catch (e) {
       setError((e as Error).message);
@@ -172,46 +174,55 @@ function SectionCard({
         value={section.title}
         placeholder="Título del apartado"
         onChange={(e) => {
-          updateSection(subject, section.id, { title: e.target.value });
+          updateSectionTitle(subject, section.id, e.target.value);
           onChanged();
         }}
       />
-      <textarea
-        value={section.text}
-        rows={3}
-        placeholder="Escribe tus notas aquí…"
-        onChange={(e) => {
-          updateSection(subject, section.id, { text: e.target.value });
-        }}
-        onBlur={onChanged}
-      />
-      {section.images.length > 0 && (
-        <div className="image-grid">
-          {section.images.map((img, i) => (
-            <div className="image-thumb" key={i}>
-              <img src={img} alt={`Imagen ${i + 1} de ${section.title}`} />
-              <button
-                className="danger icon-btn img-del"
-                aria-label="Eliminar imagen"
-                onClick={() => {
-                  removeImage(subject, section.id, i);
-                  onChanged();
-                }}
-              >
-                <Icon name="trash" size={13} />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="blocks">
+        {section.blocks.map((b) => (
+          <BlockView
+            key={b.id}
+            subject={subject}
+            sectionId={section.id}
+            block={b}
+            onChanged={onChanged}
+          />
+        ))}
+        {section.blocks.length === 0 && (
+          <p className="muted">Apartado vacío — agrega tu primer bloque abajo.</p>
+        )}
+      </div>
       {error && <div className="error">{error}</div>}
-      <div className="row" style={{ marginTop: 8 }}>
-        <button className="secondary" onClick={() => fileRef.current?.click()}>
-          <Icon name="plus" size={15} />
-          Subir imagen
+      <div className="block-menu">
+        {BLOCK_MENU.map((m) => (
+          <button
+            key={m.type}
+            className="ghost block-btn"
+            onClick={() => {
+              addBlock(subject, section.id, m.type);
+              onChanged();
+            }}
+          >
+            <Icon name={m.icon} size={14} />
+            {m.label}
+          </button>
+        ))}
+        <button
+          className="ghost block-btn"
+          onClick={() => {
+            addBlock(subject, section.id, "divider");
+            onChanged();
+          }}
+        >
+          <Icon name="reset" size={14} />
+          Separador
+        </button>
+        <button className="ghost block-btn" onClick={() => fileRef.current?.click()}>
+          <Icon name="plus" size={14} />
+          Imagen
         </button>
         <button
-          className="ghost"
+          className="danger block-btn"
           onClick={() => {
             if (confirm("¿Eliminar este apartado?")) {
               deleteSection(subject, section.id);
@@ -219,8 +230,8 @@ function SectionCard({
             }
           }}
         >
-          <Icon name="trash" size={15} />
-          Eliminar apartado
+          <Icon name="trash" size={14} />
+          Eliminar
         </button>
       </div>
       <input
@@ -230,6 +241,85 @@ function SectionCard({
         hidden
         onChange={(e) => void onPick(e.target.files?.[0])}
       />
+    </div>
+  );
+}
+
+function BlockView({
+  subject,
+  sectionId,
+  block,
+  onChanged,
+}: {
+  subject: string;
+  sectionId: string;
+  block: NoteBlock;
+  onChanged: () => void;
+}) {
+  const remove = () => {
+    removeBlock(subject, sectionId, block.id);
+    onChanged();
+  };
+
+  if (block.type === "divider") {
+    return (
+      <div className="block-row">
+        <hr className="block-divider" />
+        <button className="ghost icon-btn block-del" onClick={remove} aria-label="Eliminar bloque">
+          <Icon name="x" size={13} />
+        </button>
+      </div>
+    );
+  }
+
+  if (block.type === "image") {
+    return (
+      <div className="block-row">
+        <div className="image-thumb block-image">
+          {block.src && <img src={block.src} alt="Imagen del apunte" />}
+          <button className="danger icon-btn img-del" onClick={remove} aria-label="Eliminar imagen">
+            <Icon name="trash" size={13} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const isHeading = block.type === "heading";
+  const isQuote = block.type === "quote";
+  const isTodo = block.type === "todo";
+  const isBullet = block.type === "bullet";
+
+  return (
+    <div className="block-row">
+      {isTodo && (
+        <input
+          type="checkbox"
+          className="block-checkbox"
+          checked={block.checked ?? false}
+          onChange={(e) => {
+            updateBlock(subject, sectionId, block.id, { checked: e.target.checked });
+            onChanged();
+          }}
+        />
+      )}
+      {isBullet && <span className="block-bullet">•</span>}
+      <input
+        className={`block-input${isHeading ? " block-heading" : ""}${isQuote ? " block-quote" : ""}${
+          isTodo && block.checked ? " block-done" : ""
+        }`}
+        value={block.text}
+        placeholder={
+          isHeading ? "Título" : isTodo ? "Tarea…" : isQuote ? "Cita…" : isBullet ? "Elemento" : "Escribe aquí…"
+        }
+        onChange={(e) => {
+          updateBlock(subject, sectionId, block.id, { text: e.target.value });
+          onChanged();
+        }}
+      />
+      <button className="ghost icon-btn block-del" onClick={remove} aria-label="Eliminar bloque">
+        <Icon name="x" size={13} />
+      </button>
     </div>
   );
 }

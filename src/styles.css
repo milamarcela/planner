@@ -1010,3 +1010,109 @@ label {
 .today-item {
   box-shadow: var(--shadow);
 }
+
+/* Editor de bloques estilo Notion */
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 6px 0 10px;
+}
+
+.block-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.block-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 6px 4px;
+  margin-bottom: 0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.block-input:focus {
+  background: var(--bg-soft);
+  border: none;
+}
+
+.block-heading {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary-strong);
+}
+
+.block-quote {
+  border-left: 4px solid var(--primary);
+  padding-left: 10px;
+  font-style: italic;
+  color: var(--text-soft);
+}
+
+.block-done {
+  text-decoration: line-through;
+  color: var(--text-soft);
+}
+
+.block-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.block-bullet {
+  color: var(--primary-strong);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.block-divider {
+  flex: 1;
+  border: none;
+  border-top: 2px dashed var(--border);
+}
+
+.block-image {
+  margin: 4px 0;
+}
+
+.block-del {
+  padding: 4px 6px;
+  opacity: 0.6;
+}
+
+.block-row:hover .block-del {
+  opacity: 1;
+}
+
+.block-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-top: 2px dashed var(--border);
+  padding-top: 10px;
+}
+
+.block-btn {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.spotify-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 5px 12px;
+  border: 2px solid var(--border);
+}

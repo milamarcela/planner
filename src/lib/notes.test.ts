@@ -1,13 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { addClass } from "./schedule";
 import {
-  addImage,
+  addBlock,
   addSection,
   deleteSection,
   getSections,
   getSubjectCards,
-  removeImage,
-  updateSection,
+  removeBlock,
+  updateBlock,
+  updateSectionTitle,
 } from "./notes";
 
 beforeEach(() => localStorage.clear());
@@ -23,17 +24,22 @@ describe("notebook de materias", () => {
     expect(cards.find((c) => c.subject === "Cálculo")?.sectionCount).toBe(1);
   });
 
-  it("CRUD de secciones e imágenes", () => {
+  it("bloques: agregar, editar, marcar tarea, eliminar y contar imágenes", () => {
     const s = addSection("Química", "#a8d8f0", "Enlaces");
-    updateSection("Química", s.id, { text: "Repasar enlaces iónicos" });
-    addImage("Química", s.id, "data:image/png;base64,AAA");
-    addImage("Química", s.id, "data:image/png;base64,BBB");
-    let sections = getSections("Química");
-    expect(sections[0].text).toContain("iónicos");
-    expect(sections[0].images).toHaveLength(2);
-    removeImage("Química", s.id, 0);
-    sections = getSections("Química");
-    expect(sections[0].images).toEqual(["data:image/png;base64,BBB"]);
+    updateSectionTitle("Química", s.id, "Enlaces químicos");
+    addBlock("Química", s.id, "heading");
+    addBlock("Química", s.id, "todo");
+    addBlock("Química", s.id, "image", "data:image/png;base64,AAA");
+    let section = getSections("Química")[0];
+    expect(section.title).toBe("Enlaces químicos");
+    expect(section.blocks).toHaveLength(3);
+    const todo = section.blocks[1];
+    updateBlock("Química", s.id, todo.id, { text: "Repasar enlaces iónicos", checked: true });
+    section = getSections("Química")[0];
+    expect(section.blocks[1].checked).toBe(true);
+    expect(getSubjectCards().find((c) => c.subject === "Química")?.imageCount).toBe(1);
+    removeBlock("Química", s.id, section.blocks[0].id);
+    expect(getSections("Química")[0].blocks).toHaveLength(2);
     deleteSection("Química", s.id);
     expect(getSections("Química")).toHaveLength(0);
   });
