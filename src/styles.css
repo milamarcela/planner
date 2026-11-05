@@ -17,6 +17,7 @@
   --accent-soft: #e4dcf8;
   --danger: #d95f7d;
   --shadow: 0 6px 18px rgba(224, 106, 156, 0.16);
+  --shadow-strong: 0 1px 2px rgba(224, 106, 156, 0.10), 0 10px 28px rgba(224, 106, 156, 0.18);
   --border: #f3c4d8;
   --dot: rgba(224, 106, 156, 0.10);
 }
@@ -35,6 +36,7 @@
   --accent-soft: #4d4266;
   --danger: #f08aa0;
   --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  --shadow-strong: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px rgba(0, 0, 0, 0.45);
   --border: #553c50;
   --dot: rgba(242, 164, 195, 0.07);
 }
@@ -82,11 +84,11 @@ body {
 }
 
 .card {
-  background: var(--surface);
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
   border: 2px solid var(--border);
   border-radius: 22px;
   padding: 16px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-strong);
   margin-bottom: 16px;
 }
 
@@ -228,6 +230,7 @@ label {
   cursor: pointer;
   border: 2px solid rgba(255, 255, 255, 0.65);
   border-top-width: 5px;
+  box-shadow: 0 3px 10px rgba(74, 53, 66, 0.18);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -782,85 +785,7 @@ label {
   gap: 6px;
 }
 
-/* Navbar superior */
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin: -20px -16px 18px;
-  padding: 12px 18px;
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 2px solid var(--border);
-}
-
-.navbar-logo {
-  font-size: 1.35rem;
-  text-decoration: none;
-}
-
-.navbar-links {
-  display: flex;
-  gap: 4px;
-  background: var(--surface-2);
-  border: 2px solid var(--border);
-  border-radius: 999px;
-  padding: 5px;
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-.navbar-links button {
-  background: transparent;
-  color: var(--text-soft);
-  box-shadow: none;
-  padding: 7px 12px;
-  font-size: 0.88rem;
-}
-
-.navbar-links button.active {
-  background: var(--primary-soft);
-  color: var(--primary-strong);
-}
-
-@media (max-width: 560px) {
-  .navbar-label {
-    display: none;
-  }
-  .navbar-links button {
-    padding: 7px 10px;
-  }
-}
-
 /* Animaciones de página y tarjetas */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-enter {
-  animation: fadeUp 0.35s ease both;
-}
-
-.card {
-  animation: fadeUp 0.45s ease both;
-}
-
-.subject-card,
-.section-card {
-  animation: fadeUp 0.45s ease both;
-}
-
 /* Tarjetas de materias dinámicas */
 .subjects-grid {
   display: grid;
@@ -880,17 +805,11 @@ label {
   color: #4a3542;
   text-align: left;
   cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: var(--shadow-strong);
 }
 
 :root[data-theme="dark"] .subject-card {
   color: #2c2130;
-}
-
-.subject-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 12px 26px rgba(224, 106, 156, 0.28);
 }
 
 .subject-icon {
@@ -940,7 +859,6 @@ label {
   border-radius: 12px;
   overflow: hidden;
   border: 2px solid var(--border);
-  animation: fadeUp 0.3s ease both;
 }
 
 .image-thumb img {

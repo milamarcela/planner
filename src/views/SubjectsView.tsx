@@ -52,11 +52,10 @@ export default function SubjectsView() {
         </div>
       ) : (
         <div className="subjects-grid">
-          {cards.map((c, i) => (
+          {cards.map((c) => (
             <SubjectCardView
               key={c.subject}
               card={c}
-              index={i}
               onOpen={() => setSelected(c.subject)}
             />
           ))}
@@ -68,17 +67,15 @@ export default function SubjectsView() {
 
 function SubjectCardView({
   card,
-  index,
   onOpen,
 }: {
   card: SubjectCard;
-  index: number;
   onOpen: () => void;
 }) {
   return (
     <button
       className="subject-card"
-      style={{ background: card.color, animationDelay: `${index * 70}ms` }}
+      style={{ background: `linear-gradient(160deg, ${card.color}, ${card.color}b3)` }}
       onClick={onOpen}
     >
       <span className="subject-icon">
@@ -132,12 +129,11 @@ function SubjectDetail({
           <p className="empty">Sin apartados todavía. Crea uno para tomar notas e incluir imágenes.</p>
         </div>
       )}
-      {sections.map((s, i) => (
+      {sections.map((s) => (
         <SectionCard
           key={s.id}
           subject={subject}
           section={s}
-          index={i}
           onChanged={rerender}
         />
       ))}
@@ -148,12 +144,10 @@ function SubjectDetail({
 function SectionCard({
   subject,
   section,
-  index,
   onChanged,
 }: {
   subject: string;
   section: NoteSection;
-  index: number;
   onChanged: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -172,7 +166,7 @@ function SectionCard({
   };
 
   return (
-    <div className="card section-card" style={{ animationDelay: `${index * 70}ms` }}>
+    <div className="card section-card">
       <input
         className="section-title"
         value={section.title}
