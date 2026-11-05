@@ -18,7 +18,7 @@ export function isSpotifyConfigured(): boolean {
 }
 
 function redirectUri(): string {
-  return window.location.origin + window.location.pathname;
+  return window.location.origin + "/";
 }
 
 async function sha256(text: string): Promise<ArrayBuffer> {
