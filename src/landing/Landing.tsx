@@ -1,5 +1,6 @@
 import Icon from "../components/Icon";
 import type { IconName } from "../components/Icon";
+import SiteNav from "../components/SiteNav";
 
 const FEATURES: Array<{ icon: IconName; title: string; text: string; tint: string }> = [
   {
@@ -11,7 +12,7 @@ const FEATURES: Array<{ icon: IconName; title: string; text: string; tint: strin
   {
     icon: "book",
     title: "Cuaderno por materia",
-    text: "Apartados tipo notebook con notas e imágenes: fotos de la pizarra, esquemas, PDFs.",
+    text: "Apartados con bloques estilo Notion: títulos, tareas, listas, citas e imágenes.",
     tint: "#cdb4f6",
   },
   {
@@ -46,25 +47,22 @@ const STEPS = [
   { icon: "play" as IconName, title: "Pon música y enfócate", text: "Pomodoro + Spotify Now Playing." },
 ];
 
-export default function Landing({ onEnter }: { onEnter: () => void }) {
+const CLASS_PREVIEW = [
+  { subject: "Cálculo II", meta: "08:00–10:00 · Aula 204", color: "#f6a8c0" },
+  { subject: "Química", meta: "10:30–12:00 · Lab 1", color: "#cdb4f6" },
+  { subject: "Psicología", meta: "14:00–16:00 · Aula B8", color: "#a8d8f0" },
+];
+
+export default function Landing() {
+  const enter = () => (window.location.hash = "#/app");
+
   return (
     <div className="landing">
       <div className="hero-bg" aria-hidden="true" />
-      <header className="landing-nav">
-        <div className="logo">
-          <Icon name="flower" size={28} color="var(--primary)" />
-          StudyBloom
-        </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <a className="btn-link" href="#features">
-            Funciones
-          </a>
-          <button className="btn-solid" onClick={onEnter}>
-            <Icon name="sparkle" size={16} />
-            Abrir la app
-          </button>
-        </div>
-      </header>
+      <span className="float-deco deco-1" aria-hidden="true"><Icon name="flower" size={44} /></span>
+      <span className="float-deco deco-2" aria-hidden="true"><Icon name="sparkle" size={30} /></span>
+      <span className="float-deco deco-3" aria-hidden="true"><Icon name="heart" size={26} /></span>
+      <SiteNav mode="landing" />
 
       <section className="hero">
         <div className="hero-badge">
@@ -81,7 +79,7 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
           Linda por fuera, poderosa por dentro — en tu PC y en tu celular.
         </p>
         <div className="hero-cta">
-          <button className="btn-lg btn-solid" onClick={onEnter}>
+          <button className="btn-lg btn-solid" onClick={enter}>
             <Icon name="calendar" size={18} />
             Empezar ahora — es gratis
           </button>
@@ -89,32 +87,46 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
             Ver funciones
           </a>
         </div>
+
         <div className="hero-preview card">
-          <div className="preview-grid">
-            <div className="preview-col" style={{ background: "linear-gradient(160deg,#f6a8c0,#f08bb0)" }}>
-              <strong>Cálculo II</strong>
-              <span>08:00–10:00 · Aula 204</span>
-            </div>
-            <div className="preview-col" style={{ background: "linear-gradient(160deg,#cdb4f6,#b39ae8)" }}>
-              <strong>Química</strong>
-              <span>10:30–12:00 · Lab 1</span>
-            </div>
-            <div className="preview-col" style={{ background: "linear-gradient(160deg,#a8d8f0,#8ec4e4)" }}>
-              <strong>Psicología</strong>
-              <span>14:00–16:00 · Aula B8</span>
-            </div>
-            <div className="preview-col now-playing-preview">
-              <span className="np-label">
-                <span className="np-dot live" /> Sonando ahora
+          <div className="window-bar">
+            <span className="win-dot" style={{ background: "#f6a8c0" }} />
+            <span className="win-dot" style={{ background: "#ffe3a3" }} />
+            <span className="win-dot" style={{ background: "#b8e6c8" }} />
+            <span className="win-title">StudyBloom — Hoy</span>
+          </div>
+          <div className="preview-rows">
+            {CLASS_PREVIEW.map((c) => (
+              <div className="preview-row" key={c.subject}>
+                <span className="preview-badge" style={{ background: c.color }}>
+                  <Icon name="book" size={15} />
+                </span>
+                <div className="preview-info">
+                  <strong>{c.subject}</strong>
+                  <span className="muted">{c.meta}</span>
+                </div>
+                <Icon name="clock" size={15} color="var(--text-soft)" />
+              </div>
+            ))}
+            <div className="preview-row now-playing-preview">
+              <span className="preview-badge np-badge">
+                <Icon name="music" size={15} />
               </span>
-              <strong>lofi beats</strong>
-              <span className="muted">modo estudio · 25:00</span>
+              <div className="preview-info">
+                <strong>lofi beats — Sonando ahora</strong>
+                <span className="muted">modo estudio · 25:00</span>
+              </div>
+              <span className="np-dot live" />
             </div>
           </div>
         </div>
       </section>
 
       <section id="features" className="section">
+        <div className="section-badge">
+          <Icon name="sparkle" size={13} />
+          Funciones
+        </div>
         <h2 className="section-title">Todo lo que necesitas para estudiar mejor</h2>
         <div className="features-grid">
           {FEATURES.map((f) => (
@@ -130,6 +142,10 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
       </section>
 
       <section className="section">
+        <div className="section-badge">
+          <Icon name="heart" size={13} />
+          Súper fácil
+        </div>
         <h2 className="section-title">En tres pasos</h2>
         <div className="steps-grid">
           {STEPS.map((s, i) => (
@@ -148,7 +164,7 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
       <section className="cta-banner">
         <h2>¿Lista para organizar tu semestre?</h2>
         <p>Tus datos se guardan en tu dispositivo. Sin registros, sin complicaciones.</p>
-        <button className="btn-lg btn-solid btn-on-accent" onClick={onEnter}>
+        <button className="btn-lg btn-solid btn-on-accent" onClick={enter}>
           <Icon name="heart" size={17} />
           Crear mi planner
         </button>
